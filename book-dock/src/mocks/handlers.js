@@ -100,3 +100,109 @@ handlers.push(
     return res(ctx.status(200), ctx.json({ message: 'Post deleted' }));
   })
 );
+
+let guides = [
+  {
+    guideID: 401,
+    title: "Exploring Lomza",
+    content: "A guide to the best spots in Lomza.",
+    authorID: 301,
+    publicationDate: "2022-07-01",
+    pictures: [
+      {
+        url: "https://example.com/lomza1.jpg",
+        description: "A scenic view of Lomza’s Old Town.",
+      },
+      {
+        url: "https://example.com/lomza2.jpg",
+        description: "The Narew River in Lomza.",
+      },
+    ],
+    links: [
+      {
+        url: "https://tourism.lomza.com",
+        description: "Official Lomza Tourism Website",
+      },
+      {
+        url: "https://example.com/best-cafes-lomza",
+        description: "Top cafes to visit in Lomza",
+      },
+    ],
+  },
+];
+
+let comments = []; // For comments on guides
+
+
+handlers.push(
+  // ✅ GET /guides (needed to fetch the list)
+  rest.get('/guides', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(guides));
+  })
+);
+
+handlers.push(
+  // ✅ POST /guides
+  rest.post('/guides', async (req, res, ctx) => {
+    const guide = await req.json();
+    const newGuide = { ...guide, guideID: Date.now() };
+    guides.push(newGuide);
+    return res(ctx.status(201), ctx.json({
+      message: 'Guide added successfully.',
+      guideID: newGuide.guideID
+    }));
+  }),
+
+  // ✅ PUT /guides/:guideID
+  rest.put('/guides/:guideID', async (req, res, ctx) => {
+    const { guideID } = req.params;
+    const updatedGuide = await req.json();
+    let found = false;
+
+    guides = guides.map(guide => {
+      if (guide.guideID === parseInt(guideID)) {
+        found = true;
+        return { ...guide, ...updatedGuide };
+      }
+      return guide;
+    });
+
+    if (!found) {
+      return res(ctx.status(404), ctx.json({ message: 'Guide not found' }));
+    }
+
+    return res(ctx.status(200), ctx.json({ message: 'Guide updated successfully.' }));
+  }),
+
+  // ✅ DELETE /guides/:guideID
+  rest.delete('/guides/:guideID', (req, res, ctx) => {
+    const { guideID } = req.params;
+    const initialLength = guides.length;
+    guides = guides.filter(g => g.guideID !== parseInt(guideID));
+
+    if (guides.length === initialLength) {
+      return res(ctx.status(404), ctx.json({ message: 'Guide not found' }));
+    }
+
+    return res(ctx.status(200), ctx.json({ message: 'Guide deleted successfully.' }));
+  }),
+
+  // ✅ POST /guides/:guideID/comments
+  rest.post('/guides/:guideID/comments', async (req, res, ctx) => {
+    const { guideID } = req.params;
+    const { userID, content } = await req.json();
+    const commentID = Date.now();
+
+    comments.push({
+      commentID,
+      guideID: parseInt(guideID),
+      userID,
+      content,
+    });
+
+    return res(ctx.status(201), ctx.json({
+      message: 'Comment added successfully.',
+      commentID
+    }));
+  })
+);

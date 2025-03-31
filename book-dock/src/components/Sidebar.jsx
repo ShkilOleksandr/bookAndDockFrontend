@@ -10,6 +10,7 @@ const Sidebar = () => {
           <li><Link to="/" className="hover:text-gray-300">Dashboard</Link></li>
           <li><Link to="/users" className="hover:text-gray-300">Users</Link></li>
           <li><Link to="/posts" className="hover:text-gray-300">Posts</Link></li>
+          <li><Link to="/guides" className="hover:text-gray-300">Guides</Link></li>
           <li><Link to="/settings" className="hover:text-gray-300">Settings</Link></li>
         </ul>
       </nav>
