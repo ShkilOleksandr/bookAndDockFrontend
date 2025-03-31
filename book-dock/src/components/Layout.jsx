@@ -1,16 +1,14 @@
-import React from 'react';
-import Sidebar from './Sidebar';
+// src/components/Layout.jsx
 import Navbar from './Navbar';
+import Sidebar from './Sidebar';
 
 const Layout = ({ children }) => {
   return (
-    <div className="flex">
+    <div style={{ display: 'flex' }}>
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div style={{ flex: 1 }}>
         <Navbar />
-        <main className="p-6 bg-gray-100 min-h-screen">
-          {children}
-        </main>
+        <main>{children}</main> {/* THIS LINE IS CRUCIAL */}
       </div>
     </div>
   );

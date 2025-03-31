@@ -9,6 +9,7 @@ const Sidebar = () => {
         <ul className="space-y-4">
           <li><Link to="/" className="hover:text-gray-300">Dashboard</Link></li>
           <li><Link to="/users" className="hover:text-gray-300">Users</Link></li>
+          <li><Link to="/posts" className="hover:text-gray-300">Posts</Link></li>
           <li><Link to="/settings" className="hover:text-gray-300">Settings</Link></li>
         </ul>
       </nav>
