@@ -1,10 +1,17 @@
+
 import React, { useEffect, useState } from 'react';
 import { getUsers, updateUser, deleteUser } from '../services/userService';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
-  const [editingUser, setEditingUser] = useState(null); // for modal
-  const [form, setForm] = useState({ name: '', email: '', role: '' });
+  const [editingUser, setEditingUser] = useState(null);
+  const [form, setForm] = useState({
+    name: '',
+    surname: '',
+    email: '',
+    phoneNumber: '',
+    roleId: ''
+  });
 
   useEffect(() => {
     getUsers().then(data => {
@@ -19,23 +26,25 @@ export default function Users() {
 
     const res = await deleteUser(userID);
     console.log(res.message);
-    setUsers(users.filter(u => u.userID !== userID));
+    setUsers(users.filter(u => u.id !== userID));
   };
 
   const handleEditClick = (user) => {
     setEditingUser(user);
     setForm({
       name: user.name,
+      surname: user.surname,
       email: user.email,
-      role: user.role,
+      phoneNumber: user.phoneNumber || '',
+      roleId: user.role?.id || ''
     });
   };
 
   const handleUpdate = async () => {
-    const res = await updateUser(editingUser.userID, form);
+    const res = await updateUser(editingUser.id, form);
     console.log(res.message);
 
-    setUsers(users.map(u => u.userID === editingUser.userID ? { ...u, ...form } : u));
+    setUsers(users.map(u => u.id === editingUser.id ? { ...u, ...form } : u));
     setEditingUser(null);
   };
 
@@ -49,20 +58,24 @@ export default function Users() {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Surname</th>
               <th>Email</th>
+              <th>Phone</th>
               <th>Role</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {users.map(user => (
-              <tr key={user.userID}>
+              <tr key={user.id}>
                 <td>{user.name}</td>
+                <td>{user.surname}</td>
                 <td>{user.email}</td>
-                <td>{user.role}</td>
+                <td>{user.phoneNumber}</td>
+                <td>{user.role?.name || 'N/A'}</td>
                 <td>
                   <button onClick={() => handleEditClick(user)}>Edit</button>
-                  <button onClick={() => handleDelete(user.userID)} style={{ marginLeft: '10px' }}>
+                  <button onClick={() => handleDelete(user.id)} style={{ marginLeft: '10px' }}>
                     Delete
                   </button>
                 </td>
@@ -73,44 +86,42 @@ export default function Users() {
       )}
 
       {editingUser && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '20%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: '#fff',
-            padding: '20px',
-            border: '1px solid #ccc',
-            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
-            zIndex: 1000,
-          }}
-        >
+        <div style={{
+          position: 'fixed',
+          top: '20%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#fff',
+          padding: '20px',
+          border: '1px solid #ccc',
+          boxShadow: '0 0 10px rgba(0,0,0,0.2)',
+          zIndex: 1000,
+        }}>
           <h3>Edit User</h3>
           <div>
             <label>Name: </label>
-            <input
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-            />
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          </div>
+          <div>
+            <label>Surname: </label>
+            <input value={form.surname} onChange={(e) => setForm({ ...form, surname: e.target.value })} />
           </div>
           <div>
             <label>Email: </label>
-            <input
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-            />
+            <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+          </div>
+          <div>
+            <label>Phone Number: </label>
+            <input value={form.phoneNumber} onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })} />
           </div>
           <div>
             <label>Role: </label>
-            <select
-              value={form.role}
-              onChange={(e) => setForm({ ...form, role: e.target.value })}
-            >
-              <option value="sailor">Sailor</option>
-              <option value="dock_owner">Dock Owner</option>
-              <option value="editor">Editor</option>
-              <option value="admin">Admin</option>
+            <select value={form.roleId} onChange={(e) => setForm({ ...form, roleId: parseInt(e.target.value) })}>
+              <option value="">Select role</option>
+              <option value={1}>Sailor</option>
+              <option value={2}>Dock Owner</option>
+              <option value={3}>Editor</option>
+              <option value={4}>Admin</option>
             </select>
           </div>
           <div style={{ marginTop: '10px' }}>
