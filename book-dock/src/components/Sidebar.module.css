@@ -1,0 +1,23 @@
+/* Sidebar.module.css */
+
+.sidebar {
+  padding: 1rem;
+  /* whatever else you had for the panel… */
+}
+
+.dropdown {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--tbl-border);
+  background: var(--tbl-bg);
+  cursor: pointer;
+  /* Box shadow or focus style if you like: */
+  transition: border-color 0.2s ease;
+}
+
+.dropdown:focus {
+  outline: none;
+  border-color: var(--btn-edit-bg);
+}
