@@ -20,7 +20,6 @@ export default function Guides() {
   const [commentForm, setCommentForm] = useState({ userID: '', content: '' });
 
   useEffect(() => {
-    // Since we're mocking, fetch is skipped; we assume initial data is already loaded from handlers
     fetch('/guides')
       .then(res => res.json())
       .then(data => setGuides(data));
