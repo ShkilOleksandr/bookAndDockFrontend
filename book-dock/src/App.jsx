@@ -1,29 +1,48 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
-import Users from './pages/Users';
-import Settings from './pages/Settings';
-import Posts from './pages/Posts';
-import Guides from './pages/Guides';
-import Login from './pages/LoginPage';
-import RequireAuth from './utils/RequireAuth';
+// src/App.jsx
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate
+} from 'react-router-dom';
 
-function App() {
+import RequireAuth from './utils/RequireAuth';
+import Layout      from './components/Layout';
+import Dashboard   from './pages/Dashboard';
+import Users       from './pages/Users';
+import Posts       from './pages/Posts';
+import Guides      from './pages/Guides';
+import Settings    from './pages/Settings';
+// ← your feature‑based login page
+import LoginPage   from './features/auth/LoginPage';
+
+export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        {/* 1) public login screen */}
+        <Route path="/login" element={<LoginPage />} />
 
-        <Route element={<RequireAuth><Layout /></RequireAuth>}>
-          <Route index element={<Dashboard />} /> {/* Renders at '/' */}
-          <Route path="users" element={<Users />} />
-          <Route path="posts" element={<Posts />} />
+        {/* 2) everything under "/" is protected AND wrapped in your Layout */}
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <Layout />
+            </RequireAuth>
+          }
+        >
+          <Route index        element={<Dashboard />} />
+          <Route path="users"    element={<Users />} />
+          <Route path="posts"    element={<Posts />} />
+          <Route path="guides"   element={<Guides />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="guides" element={<Guides />} />
         </Route>
+
+        {/* 3) catch any unknown URL and send to /login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
 }
-
-export default App;

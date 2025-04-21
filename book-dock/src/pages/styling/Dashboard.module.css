@@ -1,0 +1,44 @@
+/* Dashboard.module.css */
+
+.dashboard {
+    padding: 2rem;
+    background: var(--gray-50);       /* light gray page background */
+    min-height: 100vh;                /* full‑screen height under your navbar */
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: var(--gray-800);
+  }
+  
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .card {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .cardTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--gray-700);
+  }
+  
+  .cardValue {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: var(--blue-600);
+    margin-top: auto;  /* push value to the bottom of the card */
+  }
+  

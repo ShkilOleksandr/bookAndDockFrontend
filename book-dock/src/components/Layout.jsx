@@ -1,19 +1,35 @@
-import { Outlet } from 'react-router-dom';
-import Navbar from './Navbar';
+// src/components/Layout.jsx
+import React from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import Navbar  from './Navbar';
 import Sidebar from './Sidebar';
+import styles from './Layout.module.css';
 
-const Layout = () => {
+export default function Layout() {
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    navigate('/login', { replace: true });
+  };
+
   return (
-    <div style={{ display: 'flex' }}>
+    <div className={styles.container}>
       <Sidebar />
-      <div style={{ flex: 1 }}>
+
+      <div className={styles.main}>
         <Navbar />
-        <main>
-          <Outlet /> {/* ✅ This renders your nested routes (Dashboard, Users, etc.) */}
-        </main>
+        <div className={styles.outlet}>
+          <Outlet />
+        </div>
       </div>
+
+      <button
+        className={styles.logoutButton}
+        onClick={logout}
+      >
+        Log out
+      </button>
     </div>
   );
-};
-
-export default Layout;
+}
