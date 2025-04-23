@@ -1,24 +1,60 @@
-// src/pages/Dashboard.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './styling/Dashboard.module.css';
 
+// Base URL for ASP.NET server (override via VITE_API_URL in .env)
+const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 export default function Dashboard() {
-  // you can replace these with real data from hooks/services
-  const stats = [
-    { title: 'Total Users', value: 124 },
-    { title: 'Total Posts', value: 76 },
-    { title: 'Total Guides', value: 15 },
-  ];
+  const [rolesCount, setRolesCount] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchUserCounts() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${apiBase}/UserCount`, {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} - ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setRolesCount(data);
+      } catch (err) {
+        setError(err.message || 'Network error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUserCounts();
+  }, []);
+
+  if (loading) {
+    return <div className={styles.dashboard}>Loading roles...</div>;
+  }
+
+  if (error) {
+    return <div className={styles.dashboard}>Error: {error}</div>;
+  }
 
   return (
     <div className={styles.dashboard}>
       <h1 className={styles.title}>Dashboard</h1>
-
       <div className={styles.cards}>
-        {stats.map((s) => (
-          <div key={s.title} className={styles.card}>
-            <div className={styles.cardTitle}>{s.title}</div>
-            <div className={styles.cardValue}>{s.value}</div>
+        {Object.entries(rolesCount).map(([role, count]) => (
+          <div key={role} className={styles.card}>
+            <div className={styles.cardTitle}>{role}</div>
+            <div className={styles.cardValue}>{count}</div>
           </div>
         ))}
       </div>
