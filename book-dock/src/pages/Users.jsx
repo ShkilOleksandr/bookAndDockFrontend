@@ -10,7 +10,7 @@ export default function Users() {
     surname: '',
     email: '',
     phoneNumber: '',
-    roleId: ''
+    role: ''
   });
 
   useEffect(() => {
@@ -71,8 +71,8 @@ export default function Users() {
                 <td>{user.name}</td>
                 <td>{user.surname}</td>
                 <td>{user.email}</td>
-                <td>{user.phoneNumber}</td>
-                <td>{user.role?.name || 'N/A'}</td>
+                <td>{user.phoneNumber || 'N/A'}</td>
+                <td>{user.role || 'N/A'}</td>
                 <td>
                   <button onClick={() => handleEditClick(user)}>Edit</button>
                   <button onClick={() => handleDelete(user.id)} style={{ marginLeft: '10px' }}>
