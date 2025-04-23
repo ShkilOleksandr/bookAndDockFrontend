@@ -16,11 +16,11 @@ export default function LoginPage() {
     setError('');
 
     // dev stub
-    if (email === 'admin2@example.com' && password === 'admin123') {
-      localStorage.setItem('token', 'fake-jwt-token-for-dev');
-      navigate('/');
-      return;
-    }
+    // if (email === 'admin2@example.com' && password === 'admin123') {
+    //   localStorage.setItem('token', 'fake-jwt-token-for-dev');
+    //   navigate('/');
+    //   return;
+    // }
 
     try {
       const { data } = await axios.post(
