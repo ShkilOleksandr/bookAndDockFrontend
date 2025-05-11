@@ -69,8 +69,8 @@ export default function Users() {
                 <td>{user.phoneNumber || 'N/A'}</td>
                 <td>{user.role || 'N/A'}</td>
                 <td>
-                  <button onClick={() => handleEditClick(user)}>Edit</button>
-                  <button onClick={() => handleDelete(user.id)} style={{ marginLeft: '10px' }}>
+                  <button className="btn btn-edit" onClick={() => handleEditClick(user)}>Edit</button>
+                  <button className="btn btn-delete" onClick={() => handleDelete(user.id)} style={{ marginLeft: '10px' }}>
                     Delete
                   </button>
                 </td>
