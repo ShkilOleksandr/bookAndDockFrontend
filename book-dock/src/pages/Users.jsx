@@ -4,14 +4,8 @@ import { getUsers, updateUser, deleteUser } from '../services/userService';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
-  const [editingUser, setEditingUser] = useState(null);
-  const [form, setForm] = useState({
-    name: '',
-    surname: '',
-    email: '',
-    phoneNumber: '',
-    role: ''
-  });
+  const [editingUser, setEditingUser] = useState(null); 
+  const [form, setForm] = useState({ name: '', email: '', role: '' });
 
   useEffect(() => {
     getUsers().then(data => {
