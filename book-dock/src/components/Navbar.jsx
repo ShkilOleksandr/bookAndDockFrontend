@@ -1,11 +1,44 @@
+// src/components/Navbar.jsx
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import styles from './Navbar.module.css';
 
-const Navbar = () => {
+const routes = [
+  { label: 'Dashboard', path: '/' },
+  { label: 'Users',     path: '/users' },
+  { label: 'Posts',     path: '/posts' },
+  { label: 'Guides',    path: '/guides' },
+  { label: 'Settings',  path: '/settings' },
+];
+
+export default function Navbar() {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const handleNavChange = e => {
+    navigate(e.target.value);
+  };
+
   return (
-    <div className="w-full h-16 bg-white shadow flex items-center justify-end px-6">
-      <span className="text-gray-700">Hello, Admin</span>
-    </div>
-  );
-};
+    <header className={styles.navbar}>
+      <div className={styles.brand}>Admin Panel</div>
 
-export default Navbar;
+      {/* only show this on small screens, hide on wide screens via CSS */}
+      <select
+        className={styles.dropdown}
+        value={pathname}
+        onChange={handleNavChange}
+      >
+        {routes.map(r => (
+          <option key={r.path} value={r.path}>
+            {r.label}
+          </option>
+        ))}
+      </select>
+
+      <div className={styles.profile}>
+        Hello, Admin
+      </div>
+    </header>
+  );
+}
