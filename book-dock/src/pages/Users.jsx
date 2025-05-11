@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getUsers, updateUser, deleteUser } from '../services/userService';
+import '../components/Users.css'; // Assuming you have some CSS for styling
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -48,7 +49,7 @@ export default function Users() {
       {users.length === 0 ? (
         <p>No users found.</p>
       ) : (
-        <table border="1" cellPadding="10">
+        <table className='user-table'>
           <thead>
             <tr>
               <th>Name</th>
