@@ -15,8 +15,6 @@ export default function Layout() {
 
   return (
     <div className={styles.container}>
-      <Sidebar />
-
       <div className={styles.main}>
         <Navbar />
         <div className={styles.outlet}>

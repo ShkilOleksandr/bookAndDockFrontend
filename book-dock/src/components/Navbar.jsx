@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Navbar.module.css';
+import Sidebar from './Sidebar';
 
 const routes = [
   { label: 'Dashboard', path: '/' },
@@ -21,6 +22,7 @@ export default function Navbar() {
 
   return (
     <header className={styles.navbar}>
+      <Sidebar />
       <div className={styles.brand}>Admin Panel</div>
 
       {/* only show this on small screens, hide on wide screens via CSS */}
@@ -35,10 +37,6 @@ export default function Navbar() {
           </option>
         ))}
       </select>
-
-      <div className={styles.profile}>
-        Hello, Admin
-      </div>
     </header>
   );
 }
