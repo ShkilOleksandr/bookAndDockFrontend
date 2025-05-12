@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getUsers, updateUser, deleteUser } from '../services/userService';
-import '../components/Users.css'; // Assuming you have some CSS for styling
+import './styling/Users.css'; // Assuming you have some CSS for styling
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -45,7 +45,7 @@ export default function Users() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Users</h2>
+      <h2 style={{ textAlign: 'center' }}>Users</h2>
       {users.length === 0 ? (
         <p>No users found.</p>
       ) : (
