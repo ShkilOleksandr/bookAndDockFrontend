@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'https://book-and-dock-backend-app-684024935709.europe-north2.run.app';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
