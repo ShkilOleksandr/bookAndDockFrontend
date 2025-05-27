@@ -8,6 +8,7 @@ const routes = [
   { label: 'Users',     path: '/users'     },
   { label: 'Docking Spots', path: '/docking-spots' },
   { label: 'Reviews',   path: '/reviews'   },
+  { label: 'Ports',     path: '/ports'     },
   { label: 'Posts',     path: '/posts'     },
   { label: 'Guides',    path: '/guides'    },
   { label: 'Settings',  path: '/settings'  },

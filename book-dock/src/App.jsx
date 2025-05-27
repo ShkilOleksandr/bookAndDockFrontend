@@ -16,6 +16,7 @@ import Guides      from './pages/Guides';
 import Settings    from './pages/Settings';
 import DockingSpots from './pages/DockingSpots';
 import Reviews from './pages/ReviewService';
+import Ports from './pages/Ports';
 // ← your feature‑based login page
 import LoginPage   from './features/auth/LoginPage';
 
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="users"    element={<Users />} />
           <Route path="reviews"  element={<Reviews />} />
           <Route path="docking-spots" element={<DockingSpots />} />
+          <Route path="ports"    element={<Ports />} />
           <Route path="posts"    element={<Posts />} />
           <Route path="guides"   element={<Guides />} />
           <Route path="settings" element={<Settings />} />
