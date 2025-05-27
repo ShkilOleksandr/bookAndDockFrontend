@@ -8,12 +8,26 @@ export default function Users() {
   const [editingUser, setEditingUser] = useState(null); 
   const [form, setForm] = useState({ name: '', email: '', role: '' });
 
+    // comparator util
+  const sortByNameThenSurname = (a, b) => {
+    // primary: name
+    const n = a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+    if (n !== 0) return n;
+    // tiebreaker: surname
+    return a.surname.localeCompare(b.surname, undefined, { sensitivity: 'base' });
+  };
+
   useEffect(() => {
     getUsers().then(data => {
-      if (Array.isArray(data)) setUsers(data);
-      else console.error('Expected array, got:', data);
+      if (Array.isArray(data)) {
+        const sorted = data.slice().sort(sortByNameThenSurname);
+        setUsers(sorted);
+      } else {
+        console.error('Expected array, got:', data);
+      }
     });
   }, []);
+
 
   const handleDelete = async (userID) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this user?');
@@ -31,7 +45,7 @@ export default function Users() {
       surname: user.surname,
       email: user.email,
       phoneNumber: user.phoneNumber || '',
-      roleId: user.role?.id || ''
+      role: user.role || ''
     });
   };
 
@@ -111,12 +125,14 @@ export default function Users() {
           </div>
           <div>
             <label>Role: </label>
-            <select value={form.roleId} onChange={(e) => setForm({ ...form, roleId: parseInt(e.target.value) })}>
+            <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
               <option value="">Select role</option>
-              <option value={1}>Sailor</option>
-              <option value={2}>Dock Owner</option>
-              <option value={3}>Editor</option>
-              <option value={4}>Admin</option>
+              <option value="User">User</option>
+              <option value="Owner">Owner</option>
+              {/* <option value="Sailor">Sailor</option>
+              <option value="Dock Owner">Dock Owner</option>
+              <option value="Editor">Editor</option> */}
+              <option value="Admin">Admin</option>
             </select>
           </div>
           <div style={{ marginTop: '10px' }}>
