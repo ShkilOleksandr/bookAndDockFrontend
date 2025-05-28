@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './styling/Dashboard.module.css';
 
 // Base URL for ASP.NET server (override via VITE_API_URL in .env)
-const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const apiBase = 'https://book-and-dock-backend-app-684024935709.europe-north2.run.app';
 
 export default function Dashboard() {
   const [rolesCount, setRolesCount] = useState({});
