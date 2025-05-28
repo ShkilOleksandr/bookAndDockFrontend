@@ -11,7 +11,6 @@ import RequireAuth from './utils/RequireAuth';
 import Layout      from './components/Layout';
 import Dashboard   from './pages/Dashboard';
 import Users       from './pages/Users';
-import Posts       from './pages/Posts';
 import Guides      from './pages/Guides';
 import Settings    from './pages/Settings';
 import DockingSpots from './pages/DockingSpots';
@@ -44,7 +43,6 @@ export default function App() {
           <Route path="docking-spots" element={<DockingSpots />} />
           <Route path="bookings" element={<Bookings />} />
           <Route path="ports"    element={<Ports />} />
-          <Route path="posts"    element={<Posts />} />
           <Route path="guides"   element={<Guides />} />
           <Route path="settings" element={<Settings />} />
         </Route>
