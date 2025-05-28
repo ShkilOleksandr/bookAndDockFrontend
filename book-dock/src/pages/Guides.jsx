@@ -14,7 +14,7 @@ export default function Guides() {
     title: '',
     content: '',
     authorID: '',
-    publicationDate: '',
+    createdOn: '',
   });
   const [editingID, setEditingID]   = useState(null);
 
@@ -38,7 +38,8 @@ export default function Guides() {
       );
     } else {
       const { guideID } = await addGuide(form);
-      setGuides(gs => [...gs, { ...form, guideID }]);
+      const fresh = await getGuides();
+      setGuides(fresh);
     }
     // reset form
     setForm({ title:'', content:'', authorID:'', publicationDate:'' });
@@ -59,7 +60,7 @@ export default function Guides() {
       title: g.title,
       content: g.content,
       authorID: g.authorID.toString(),
-      publicationDate: g.publicationDate.slice(0,10),
+      createdOn: g.createdOn.slice(0,10)
     });
   };
 
@@ -104,7 +105,7 @@ export default function Guides() {
             name="publicationDate"
             type="date"
             placeholder="Publication Date"
-            value={form.publicationDate}
+            value={form.createdOn}
             onChange={handleChange}
           />
           <button
@@ -142,7 +143,7 @@ export default function Guides() {
                   <td>{g.title}</td>
                   <td>{g.content}</td>
                   <td>{g.authorID}</td>
-                  <td>{new Date(g.publicationDate).toLocaleDateString()}</td>
+                  <td>{new Date(g.createdOn).toLocaleDateString()}</td>
                   <td>
                     <button
                       className="btn btn-edit"

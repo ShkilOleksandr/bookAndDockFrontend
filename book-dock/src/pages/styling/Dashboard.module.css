@@ -24,6 +24,7 @@
   justify-content: center;          /* center the grid items */
   width: 100%;
   max-width: 1200px;
+
 }
 
 .card {
@@ -33,6 +34,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .cardTitle {

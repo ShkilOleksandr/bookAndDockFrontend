@@ -1,58 +1,74 @@
-// Mock guideService – swap these for real HTTP calls when ready
-let _mockGuides = [
-  {
-    guideID: 1,
-    title: 'Gizycko – greatest place on earth. The end.',
-    content: 'Gizycko – greatest place on earth. The end.',
-    authorID: 2,
-    publicationDate: '2025-03-23T02:34:21.592Z',
-    pictures: [],
-    links: [],
-    comments: []
-  },
-  {
-    guideID: 2,
-    title: 'Welcome to my Dock: Bogaczewo',
-    content: 'Dock here and pay money, the best toilet outside and…',
-    authorID: 3,
-    publicationDate: '2025-03-23T02:34:21.592Z',
-    pictures: [],
-    links: [],
-    comments: []
+// src/services/guideService.js
+
+// pull in your base-URL and token
+const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+function getAuthHeaders() {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
+  };
+}
+
+async function handleResp(res) {
+  if (!res.ok) {
+    // try to pull out a JSON error message
+    let errText = '';
+    try { errText = await res.text(); } catch {}
+    throw new Error(`HTTP ${res.status} ${res.statusText}${errText ? ` — ${errText}` : ''}`);
   }
-];
+  return res.json();
+}
 
+// GET /api/Guide
 export function getGuides() {
-  return Promise.resolve([..._mockGuides]);
+  return fetch(`${apiBase}/api/Guide`, {
+    headers: getAuthHeaders(),
+    credentials: 'include'
+  }).then(handleResp);
 }
 
-export function addGuide(payload) {
-  const newID = Math.max(..._mockGuides.map(g => g.guideID)) + 1;
-  const newGuide = { ...payload, guideID: newID, comments: [] };
-  _mockGuides.push(newGuide);
-  return Promise.resolve({ guideID: newID, message: 'Guide added.' });
-}
-
-export function updateGuide(id, payload) {
-  _mockGuides = _mockGuides.map(g =>
-    g.guideID === id ? { ...g, ...payload } : g
-  );
-  return Promise.resolve({ message: `Guide ${id} updated.` });
-}
-
-export function deleteGuide(id) {
-  _mockGuides = _mockGuides.filter(g => g.guideID !== id);
-  return Promise.resolve({ message: `Guide ${id} deleted.` });
-}
-
-export function addCommentToGuide(guideID, userID, content) {
-  const guide = _mockGuides.find(g => g.guideID === guideID);
-  if (!guide) return Promise.reject('Guide not found');
-  guide.comments.push({
-    commentID: Date.now(),
-    userID,
+// POST /api/Guide
+export function addGuide({ title, content, authorID, createdOn }) {
+  const body = {
+    id: 0,
+    title,
     content,
-    createdOn: new Date().toISOString()
-  });
-  return Promise.resolve({ message: 'Comment added.' });
+    createdBy: Number(authorID),
+    createdOn: new Date(createdOn).toISOString(),
+    isApproved: true
+  };
+  return fetch(`${apiBase}/api/Guide`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    credentials: 'include',
+    body: JSON.stringify(body)
+  }).then(handleResp);
+}
+
+// PUT /api/Guide
+export function updateGuide(id, { title, content, authorID, createdOn }) {
+  const body = {
+    id,
+    title,
+    content,
+    createdBy: Number(authorID),
+    createdOn: new Date(createdOn).toISOString(),
+    isApproved: true
+  };
+  return fetch(`${apiBase}/api/Guide`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    credentials: 'include',
+    body: JSON.stringify(body)
+  }).then(handleResp);
+}
+
+// DELETE /api/Guide/{id}
+export function deleteGuide(id) {
+  return fetch(`${apiBase}/api/Guide/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+    credentials: 'include'
+  }).then(handleResp);
 }
