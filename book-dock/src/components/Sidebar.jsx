@@ -9,6 +9,7 @@ const routes = [
   { label: 'Docking Spots', path: '/docking-spots' },
   { label: 'Reviews',   path: '/reviews'   },
   { label: 'Ports',     path: '/ports'     },
+  { label: 'Comments', path: '/comments' },
   { label: 'Bookings',  path: '/bookings'  },
   { label: 'Guides',    path: '/guides'    },
   { label: 'Settings',  path: '/settings'  },

@@ -16,6 +16,7 @@ import Settings    from './pages/Settings';
 import DockingSpots from './pages/DockingSpots';
 import Reviews from './pages/Reviews';
 import Ports from './pages/Ports';
+import Comments from './pages/Comments';
 import Bookings from './pages/Bookings';
 // ← your feature‑based login page
 import LoginPage   from './features/auth/LoginPage';
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="ports"    element={<Ports />} />
           <Route path="guides"   element={<Guides />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="comments" element={<Comments />} />
         </Route>
 
         {/* 3) catch any unknown URL and send to /login */}
