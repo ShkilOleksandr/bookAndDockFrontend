@@ -1,4 +1,4 @@
-const BASE_URL = 'https://book-and-dock-backend-app-684024935709.europe-north2.run.app';
+const BASE_URL = 'https://se2.lemonfield-889f35af.germanywestcentral.azurecontainerapps.io';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');

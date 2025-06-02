@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './styling/Dashboard.module.css';
 
 // Base URL for ASP.NET server (override via VITE_API_URL in .env)
-const apiBase = 'https://book-and-dock-backend-app-684024935709.europe-north2.run.app';
+const apiBase = 'https://se2.lemonfield-889f35af.germanywestcentral.azurecontainerapps.io';
 
 export default function Dashboard() {
   const [rolesCount, setRolesCount] = useState({});
@@ -15,7 +15,7 @@ export default function Dashboard() {
         const token = localStorage.getItem('token');
         const response = await fetch(`${apiBase}/UserCount`, {
           method: 'GET',
-          mode: 'cors',
+          
           credentials: 'include',
           headers: {
             'Accept': 'application/json',
