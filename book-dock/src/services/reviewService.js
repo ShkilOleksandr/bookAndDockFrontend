@@ -13,16 +13,16 @@ const getAuthHeaders = () => {
 };
 
 /**
- * Fetch all reviews, optionally filtered by portId.
- * @param {number} [portId]
+ * Fetch all reviews, optionally filtered by dockId (portId).
+ * @param {number} [dockId]
  */
-export const getReviews = async (portId) => {
+export const getReviews = async (dockId) => {
   const params = new URLSearchParams();
-  if (portId != null) {
-    params.append('portId', portId);
+  if (dockId != null) {
+    params.append('dockId', dockId);
   }
 
-  const url = `${BASE_URL}/api/review`;
+  const url = `${BASE_URL}/api/review${params.toString() ? '?' + params : ''}`;
   const res = await fetch(url, {
     headers: getAuthHeaders(),
   });
@@ -34,4 +34,44 @@ export const getReviews = async (portId) => {
   }
 
   return res.json(); // array of ReviewReturnDto
+};
+
+/**
+ * Update a review by its ID. Expects an object of updated fields.
+ */
+export const updateReview = async (id, data) => {
+  const url = `${BASE_URL}/api/review/${id}`;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error(`Error updating review ${id}:`, res.status, errorText);
+    // Return an object with an error message shape or throw as needed:
+    return { error: errorText || 'Failed to update review' };
+  }
+
+  return res.json();
+};
+
+/**
+ * Delete a review by its ID.
+ */
+export const deleteReview = async (id) => {
+  const url = `${BASE_URL}/api/review/${id}`;
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error(`Error deleting review ${id}:`, res.status, errorText);
+    return { error: errorText || 'Failed to delete review' };
+  }
+
+  return res.json();
 };
