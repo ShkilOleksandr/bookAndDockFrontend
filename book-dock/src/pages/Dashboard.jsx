@@ -13,14 +13,11 @@ export default function Dashboard() {
     async function fetchUserCounts() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${apiBase}/UserCount`, {
-          method: 'GET',
-          
-          credentials: 'include',
-          headers: {
-            'Accept': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
-          },
+        const response = await fetch(`${apiBase}/admin/users/counts`, {
+          headers:      {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
         });
 
         if (!response.ok) {

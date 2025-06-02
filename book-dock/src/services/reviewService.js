@@ -1,11 +1,14 @@
 // src/services/reviewService.js
-const BASE_URL = 'https://book-and-dock-backend-app-684024935709.europe-north2.run.app';
+const BASE_URL = 'https://se2.lemonfield-889f35af.germanywestcentral.azurecontainerapps.io';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
+  if (!token) {
+    console.warn('⚠️ No token found in localStorage!');
+  }
   return {
     'Content-Type': 'application/json',
-    Authorization: token ? `Bearer ${token}` : ''
+    'Authorization': token ? `Bearer ${token}` : '',
   };
 };
 
@@ -15,10 +18,20 @@ const getAuthHeaders = () => {
  */
 export const getReviews = async (portId) => {
   const params = new URLSearchParams();
-  if (portId != null) params.append('portId', portId);
-  const url = `${BASE_URL}/reviews${params.toString() ? '?' + params : ''}`;
+  if (portId != null) {
+    params.append('portId', portId);
+  }
 
-  const res = await fetch(url, { headers: getAuthHeaders() });
-  if (!res.ok) throw new Error(await res.text());
+  const url = `${BASE_URL}/api/review`;
+  const res = await fetch(url, {
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error('Error fetching reviews:', res.status, errorText);
+    return []; // return empty array so UI doesn’t break
+  }
+
   return res.json(); // array of ReviewReturnDto
 };

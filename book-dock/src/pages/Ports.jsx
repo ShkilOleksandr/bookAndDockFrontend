@@ -1,95 +1,44 @@
 // src/pages/Ports.jsx
 import React, { useEffect, useState } from 'react';
-import { getPorts } from '../services/portService';
+import { getPorts }           from '../services/portService';
 import './styling/Users.css';   // reuse your table CSS
 
-// === DUMMY DATA ===
-const dummyPorts = [
-  {
-    id: 1,
-    createdOn:     '2025-03-23T02:40:57.901Z',
-    name:          'Bogaczewo',
-    description:   null,
-    ownerId:       3,
-    isApproved:    true,
-  },
-  {
-    id: 2,
-    createdOn:     '2025-03-23T02:40:57.901Z',
-    name:          'Gizycko',
-    description:   null,
-    ownerId:       3,
-    isApproved:    true,
-  },
-  {
-    id: 3,
-    createdOn:     '2025-03-23T03:36:33.736Z',
-    name:          'Zloty Port',
-    description:   null,
-    ownerId:       3,
-    isApproved:    true,
-  },
-  {
-    id: 4,
-    createdOn:     '2025-03-23T03:36:33.736Z',
-    name:          'Kamienna',
-    description:   null,
-    ownerId:       3,
-    isApproved:    true,
-  },
-  {
-    id: 5,
-    createdOn:     '2025-03-23T03:36:33.736Z',
-    name:          'Nowy Harbor',
-    description:   null,
-    ownerId:       3,
-    isApproved:    true,
-  },
-  {
-    id: 6,
-    createdOn:     '2025-03-23T03:36:33.736Z',
-    name:          'Laguna',
-    description:   null,
-    ownerId:       3,
-    isApproved:    true,
-  },
-  {
-    id: 7,
-    createdOn:     '2025-03-23T03:36:33.736Z',
-    name:          'Szczecinek Marina',
-    description:   null,
-    ownerId:       3,
-    isApproved:    true,
-  },
-  {
-    id: 8,
-    createdOn:     '2025-03-23T03:36:33.736Z',
-    name:          'Hidden Dock',
-    description:   null,
-    ownerId:       3,
-    isApproved:    true,
-  },
-];
-
 export default function Ports() {
-  const [ports, setPorts]   = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
+  const [ports, setPorts]       = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState(null);
 
   useEffect(() => {
-    // temporarily use dummy data
-    setPorts(dummyPorts);
-    setLoading(false);
+    setLoading(true);
+    setError(null);
 
-    // later, switch to real call:
-    // getPorts()
-    //   .then(data => setPorts(data))
-    //   .catch(err => setError(err.message))
-    //   .finally(() => setLoading(false));
+    getPorts()
+      .then(data => {
+        setPorts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setError(err.message || 'Failed to load ports');
+        setLoading(false);
+      });
   }, []);
 
-  if (loading) return <p>Loading ports…</p>;
-  if (error)   return <p style={{ color: 'red' }}>Error: {error}</p>;
+  if (loading) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <p>Loading ports…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center', color: 'red' }}>
+        <p>Error: {error}</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: '20px' }}>

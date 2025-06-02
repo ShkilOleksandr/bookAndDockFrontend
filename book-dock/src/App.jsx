@@ -14,7 +14,7 @@ import Users       from './pages/Users';
 import Guides      from './pages/Guides';
 import Settings    from './pages/Settings';
 import DockingSpots from './pages/DockingSpots';
-import Reviews from './pages/ReviewService';
+import Reviews from './pages/Reviews';
 import Ports from './pages/Ports';
 import Bookings from './pages/Bookings';
 // ← your feature‑based login page
