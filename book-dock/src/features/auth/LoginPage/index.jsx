@@ -24,7 +24,7 @@ export default function LoginPage() {
 
     try {
       const { data } = await axios.post(
-        'http://localhost:8080/api/auth/login',
+        'https://se2.lemonfield-889f35af.germanywestcentral.azurecontainerapps.io/api/Auth/login',
         { email, password }
       );
       localStorage.setItem('token', data.token);
