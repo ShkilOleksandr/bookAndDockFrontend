@@ -50,11 +50,21 @@ export const updateReview = async (id, data) => {
   if (!res.ok) {
     const errorText = await res.text();
     console.error(`Error updating review ${id}:`, res.status, errorText);
-    // Return an object with an error message shape or throw as needed:
     return { error: errorText || 'Failed to update review' };
   }
 
-  return res.json();
+  // read the raw body:
+  const text = await res.text();
+  if (!text) {
+    // no JSON in the body; assume success with no data
+    return {};
+  }
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    console.warn('Failed to parse JSON after update:', e);
+    return {};
+  }
 };
 
 /**

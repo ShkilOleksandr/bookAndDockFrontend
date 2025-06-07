@@ -55,3 +55,14 @@ export const updateDockingSpot = async (id, spot) => {
   // otherwise, assume the server accepted it but didn't send JSON
   return spot;
 };
+export const deleteDockingSpot = async (id) => {
+  const res = await fetch(`${BASE_URL}/api/ds/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    throw new Error(await res.text());
+  }
+  // Some APIs return 204 No Content, so we just return true:
+  return true;
+};

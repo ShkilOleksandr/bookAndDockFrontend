@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getDockingSpots, updateDockingSpot} from '../services/dockingSpotService';
+import { getDockingSpots, updateDockingSpot, deleteDockingSpot} from '../services/dockingSpotService';
 import './styling/Users.css'; // Re-use table styles
 
 // Utility to sort by name
@@ -37,6 +37,20 @@ export default function DockingSpots() {
       pricePerPerson: spot.pricePerPerson,
       isAvailable: spot.isAvailable
     });
+  };
+
+  const handleDelete = async (id) => {
+    // optional confirmation
+    if (!window.confirm('Are you sure you want to delete this spot?')) return;
+
+    try {
+      await deleteDockingSpot(id);
+      // remove from local state
+      setSpots(prev => prev.filter(s => s.id !== id));
+    } catch (err) {
+      console.error('Delete failed:', err);
+      alert('Could not delete spot: ' + err.message);
+    }
   };
 
 const handleUpdate = async () => {
