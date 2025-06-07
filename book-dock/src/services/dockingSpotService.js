@@ -20,7 +20,7 @@ export const getDockingSpots = async (filters = {}) => {
   if (filters.services)     params.append('services', filters.services);
   if (filters.availability) params.append('availability', filters.availability);
 
-  const url = `${BASE_URL}/api/dockingSpots`;
+  const url = `${BASE_URL}/api/ds`;
   const res = await fetch(url, { headers: getAuthHeaders() });
   if (!res.ok) throw new Error(await res.text());
   return res.json();
@@ -32,7 +32,7 @@ export const getDockingSpots = async (filters = {}) => {
  * @param {object} payload
  */
 export const updateDockingSpot = async (id, payload) => {
-  const res = await fetch(`${BASE_URL}/api/dockingSpots/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/ds/${id}`, {
     method: 'PUT',
     headers: getAuthHeaders(),
     body: JSON.stringify(payload)
@@ -46,7 +46,7 @@ export const updateDockingSpot = async (id, payload) => {
  * @param {number|string} id
  */
 export const deleteDockingSpot = async (id) => {
-  const res = await fetch(`${BASE_URL}/api/dockingSpots/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/ds/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders()
   });
