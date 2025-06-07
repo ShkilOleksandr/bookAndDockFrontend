@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getDockingSpots, updateDockingSpot, deleteDockingSpot } from '../services/dockingSpotService';
+import { getDockingSpots, updateDockingSpot} from '../services/dockingSpotService';
 import './styling/Users.css'; // Re-use table styles
 
 // Utility to sort by name
@@ -28,18 +28,6 @@ export default function DockingSpots() {
       })
       .catch(console.error);
   }, []);
-
-  const handleDelete = async (spotId) => {
-    if (!window.confirm('Are you sure you want to delete this docking spot?')) return;
-    try {
-      const res = await deleteDockingSpot(spotId);
-      console.log(res.message);
-      setSpots(spots.filter(s => s.id !== spotId));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const handleEditClick = (spot) => {
     setEditingSpot(spot);
     setForm({
@@ -51,16 +39,22 @@ export default function DockingSpots() {
     });
   };
 
-  const handleUpdate = async () => {
-    try {
-      const res = await updateDockingSpot(editingSpot.id, form);
-      console.log(res.message);
-      setSpots(spots.map(s => s.id === editingSpot.id ? { ...s, ...form } : s));
-      setEditingSpot(null);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+const handleUpdate = async () => {
+  try {
+    const payload = { ...editingSpot, ...form };
+    const returnedSpot = await updateDockingSpot(editingSpot.id, payload);
+
+    // replace in state and re-sort
+    setSpots(prev =>
+      [...prev.map(s => s.id === returnedSpot.id ? returnedSpot : s)]
+        .sort(sortByName)
+    );
+    setEditingSpot(null);
+  } catch (err) {
+    console.error('Update failed:', err);
+    alert('Could not save changes: ' + err.message);
+  }
+};
 
   return (
     <div style={{ padding: '20px' }}>

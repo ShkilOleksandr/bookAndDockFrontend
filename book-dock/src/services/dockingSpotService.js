@@ -9,47 +9,49 @@ const getAuthHeaders = () => {
 };
 
 /**
- * Fetch all docking spots, optionally with filters.
- * @param {{ location?: string, date?: string, price?: number, services?: string, availability?: string }} [filters]
+ * Fetch all docking spots.
  */
-export const getDockingSpots = async (filters = {}) => {
-  const params = new URLSearchParams();
-  if (filters.location)     params.append('location', filters.location);
-  if (filters.date)         params.append('date',     filters.date);
-  if (filters.price != null)params.append('price',    filters.price);
-  if (filters.services)     params.append('services', filters.services);
-  if (filters.availability) params.append('availability', filters.availability);
-
-  const url = `${BASE_URL}/api/ds`;
-  const res = await fetch(url, { headers: getAuthHeaders() });
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
-};
-
-/**
- * Update a docking spot by ID.
- * @param {number|string} id
- * @param {object} payload
- */
-export const updateDockingSpot = async (id, payload) => {
-  const res = await fetch(`${BASE_URL}/api/ds/${id}`, {
-    method: 'PUT',
-    headers: getAuthHeaders(),
-    body: JSON.stringify(payload)
-  });
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
-};
-
-/**
- * Delete a docking spot by ID.
- * @param {number|string} id
- */
-export const deleteDockingSpot = async (id) => {
-  const res = await fetch(`${BASE_URL}/api/ds/${id}`, {
-    method: 'DELETE',
+export const getDockingSpots = async () => {
+  const res = await fetch(`${BASE_URL}/api/ds`, {
     headers: getAuthHeaders()
   });
   if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  return res.json(); // array of spots
+};
+
+/**
+ * Update a docking spot.  
+ * The API expects the full spot JSON, e.g.:
+ * {
+ *   id,
+ *   name,
+ *   description,
+ *   ownerId,
+ *   portId,
+ *   pricePerNight,
+ *   pricePerPerson,
+ *   isAvailable,
+ *   createdOn
+ * }
+ */
+// dockingSpotService.js
+export const updateDockingSpot = async (id, spot) => {
+  const res = await fetch(`${BASE_URL}/api/ds/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(spot),
+  });
+  if (!res.ok) {
+    // if the server returns text errors, propagate them
+    throw new Error(await res.text());
+  }
+
+  // only try JSON if the server really sent JSON
+  const contentType = res.headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    return res.json();
+  }
+
+  // otherwise, assume the server accepted it but didn't send JSON
+  return spot;
 };
