@@ -42,8 +42,8 @@ export const getComments = async (guideId) => {
  * Update a comment by its ID. `data` should contain the fields you want to update.
  * Returns updated comment on success, or { error: string } on failure.
  */
-export const updateComment = async (id, data) => {
-  const url = `${BASE_URL}/api/Comment/${id}`;
+export const updateComment = async (data) => {
+  const url = `${BASE_URL}/api/Comment`;
   const res = await fetch(url, {
     method: 'PUT',
     headers: getAuthHeaders(),
@@ -52,10 +52,20 @@ export const updateComment = async (id, data) => {
 
   if (!res.ok) {
     const errorText = await res.text();
-    console.error(`Error updating comment ${id}:`, res.status, errorText);
+    console.error(
+      `Error updating comment ${data.id}:`,
+      res.status,
+      errorText
+    );
     return { error: errorText || 'Failed to update comment' };
   }
 
+  // if status is 204 or no body, just return the DTO we sent
+  if (res.status === 204 || res.headers.get('Content-Length') === '0') {
+    return data;
+  }
+
+  // otherwise parse the JSON
   return res.json();
 };
 

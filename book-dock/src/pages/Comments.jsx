@@ -61,14 +61,18 @@ export default function Comments() {
   };
 
   // Save updates to the comment
-  const handleUpdate = async () => {
-    if (!editingComment) return;
+ const handleUpdate = async () => {
+   if (!editingComment) return;
+   // Build the full DTO the API expects
+   const updatedDto = {
+     id:        editingComment.id,
+     createdBy: editingComment.createdBy,
+     guideId:   editingComment.guideId,
+     content:   form.content,
+     createdOn: editingComment.createdOn,    // or new Date().toISOString()
+   };
 
-    const updatedData = {
-      content: form.content,
-    };
-
-    const result = await updateComment(editingComment.id, updatedData);
+   const result = await updateComment(updatedDto);
     if (result.error) {
       alert('Error updating comment: ' + result.error);
       return;
