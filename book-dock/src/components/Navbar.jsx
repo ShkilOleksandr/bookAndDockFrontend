@@ -16,6 +16,11 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+ const logout = () => {
+   localStorage.removeItem('token');
+   navigate('/login', { replace: true });
+ };
+
   const handleNavChange = e => {
     navigate(e.target.value);
   };
@@ -23,7 +28,6 @@ export default function Navbar() {
   return (
     <header className={styles.navbar}>
       <Sidebar />
-      <div className={styles.brand}>Admin Panel</div>
 
       {/* only show this on small screens, hide on wide screens via CSS */}
       <select
@@ -37,6 +41,14 @@ export default function Navbar() {
           </option>
         ))}
       </select>
+
+      {/* center: admin panel title */}
+      <h1 className={styles.title}>Admin Panel</h1>
+
+      {/* right: logout */}
+      <button className={styles.logout} onClick={logout}>
+        Log out
+      </button>
     </header>
   );
 }

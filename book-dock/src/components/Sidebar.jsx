@@ -5,14 +5,14 @@ import styles from './Sidebar.module.css';
 
 const routes = [
   { label: 'Dashboard', path: '/dashboard' },
-  { label: 'Users',     path: '/users'     },
-  { label: 'Docking Spots', path: '/docking-spots' },
+  { label: 'Users',     path: '/users'     }, 
   { label: 'Reviews',   path: '/reviews'   },
   { label: 'Ports',     path: '/ports'     },
   { label: 'Comments', path: '/comments' },
   { label: 'Bookings',  path: '/bookings'  },
   { label: 'Guides',    path: '/guides'    },
-  { label: 'Settings',  path: '/settings'  },
+  { label: 'Docking Spots', path: '/docking-spots' },
+  //{ label: 'Settings',  path: '/settings'  },
 ];
 
 export default function Sidebar() {

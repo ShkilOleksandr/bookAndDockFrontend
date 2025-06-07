@@ -8,7 +8,8 @@ export default function Dashboard() {
   const [rolesCount, setRolesCount] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const formatLabel = str =>
+    str.replace(/([a-z])([A-Z])/g, '$1 $2');
   useEffect(() => {
     async function fetchUserCounts() {
       try {
@@ -50,7 +51,7 @@ export default function Dashboard() {
       <div className={styles.cards}>
         {Object.entries(rolesCount).map(([role, count]) => (
           <div key={role} className={styles.card}>
-            <div className={styles.cardTitle}>{role}</div>
+            <div className={styles.cardTitle}>{formatLabel(role)}</div>
             <div className={styles.cardValue}>{count}</div>
           </div>
         ))}
