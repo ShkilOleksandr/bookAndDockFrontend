@@ -1,7 +1,7 @@
 // src/services/guideService.js
 
 const BASE_URL =
-  'https://book-and-dock-backend-app-684024935709.europe-north2.run.app';
+  'https://se2.lemonfield-889f35af.germanywestcentral.azurecontainerapps.io';
 
 function getAuthHeaders() {
   const token = localStorage.getItem('token');
