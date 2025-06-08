@@ -1,7 +1,6 @@
 // src/services/guideService.js
 
 const BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
   'https://book-and-dock-backend-app-684024935709.europe-north2.run.app';
 
 function getAuthHeaders() {

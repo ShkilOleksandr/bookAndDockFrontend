@@ -35,4 +35,9 @@
   "msw": {
     "workerDirectory": "public"
   }
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",        // ← this must exist
+    "preview": "vite preview"
+  }
 }
