@@ -59,7 +59,7 @@ export default function Guides() {
     if (!window.confirm('Delete this guide?')) return;
     try {
       await deleteGuide(id);
-      setGuides(gs => gs.filter(g => g.guideID !== id));
+      setGuides(gs => gs.filter(g => g.id !== id));
     } catch (err) {
       console.error('Delete failed:', err);
       alert('Failed to delete guide');
@@ -76,14 +76,23 @@ export default function Guides() {
 
     try {
       if (mode === 'new') {
-        const created = await addGuide(payload);
-        setGuides(gs => [...gs, created].sort(sortByTitle));
+
+
+       const created = await addGuide(payload);
+       if (created) {
+         // Happy path: server gave us the new guide
+         setGuides(gs => [...gs, created].sort(sortByTitle));
+       } else {
+         // No content → re-load the full list
+         const fresh = await getGuides();
+         setGuides(fresh.sort(sortByTitle));
+       }
       } else {
-        await updateGuide(editingGuide.guideID, payload);
+        await updateGuide(editingGuide.id, payload);
         setGuides(gs =>
           gs
             .map(g =>
-              g.guideID === editingGuide.guideID
+              g.id === editingGuide.id
                 ? { ...g, ...payload }
                 : g
             )
@@ -122,8 +131,8 @@ export default function Guides() {
           </thead>
           <tbody>
             {guides.map(g => (
-              <tr key={g.guideID}>
-                <td>{g.guideID}</td>
+              <tr key={g.id}>
+                <td>{g.id}</td>
                 <td>{g.title}</td>
                 <td>{g.content}</td>
                 <td>{g.createdBy}</td>
@@ -134,7 +143,7 @@ export default function Guides() {
                   </button>
                   <button
                     className="btn btn-delete"
-                    onClick={() => handleDelete(g.guideID)}
+                    onClick={() => handleDelete(g.id)}
                     style={{ marginLeft: '10px' }}
                   >
                     Delete
@@ -160,7 +169,7 @@ export default function Guides() {
           width: '400px',
           maxWidth: '90vw',
         }}>
-          <h3>{mode === 'new' ? 'New Guide' : `Edit Guide #${editingGuide.guideID}`}</h3>
+          <h3>{mode === 'new' ? 'New Guide' : `Edit Guide #${editingGuide.id}`}</h3>
           <div style={{ display: 'grid', gap: '10px' }}>
             <label>
               Title<br/>

@@ -31,48 +31,76 @@ export const getGuides = async () => {
 
 export const addGuide = async (data) => {
   const body = {
-    id: 0,
-    title: data.title,
-    content: data.content,
-    createdBy: Number(data.authorID),
-    createdOn: new Date(data.createdOn).toISOString(),
+    id:         0,
+    title:      data.title,
+    content:    data.content,
+    createdBy:  Number(data.authorID),
+    createdOn:  new Date(data.createdOn).toISOString(),
     isApproved: true,
   };
 
   const res = await fetch(`${BASE_URL}/api/Guide`, {
-    method: 'POST',
+    method:  'POST',
     headers: getAuthHeaders(),
-    body: JSON.stringify(body),
+    body:    JSON.stringify(body),
   });
 
-  return res.json();
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    throw new Error(errText || 'Failed to create guide');
+  }
+
+  // read raw text and only parse if non-empty
+  const text = await res.text().catch(() => '');
+  if (!text) return;
+  return JSON.parse(text);
 };
 
+// guideService.js
 export const updateGuide = async (id, data) => {
-  const body = {
-    id,
-    title: data.title,
-    content: data.content,
-    createdBy: Number(data.authorID),
-    createdOn: new Date(data.createdOn).toISOString(),
-    isApproved: true,
-  };
-
-  // note the `/${id}` in the path:
-  const res = await fetch(`${BASE_URL}/api/Guide/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/guide/${id}`, {
     method: 'PUT',
     headers: getAuthHeaders(),
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+      id,
+      title:     data.title,
+      content:   data.content,
+      createdBy: Number(data.authorID),
+      createdOn: new Date(data.createdOn).toISOString(),
+      isApproved:true,
+    }),
   });
 
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    throw new Error(errText || `Failed to update guide ${id}`);
+  }
+
+  // Safely handle empty‐body responses:
+  const text = await res.text().catch(() => '');
+  if (!text) return;
+  return JSON.parse(text);
 };
+
 export const deleteGuide = async (id) => {
-  const res = await fetch(`${BASE_URL}/api/Guide/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/guide/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
   });
 
-  return res.json();
+  // 1) error‐check
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    throw new Error(errText || `Failed to delete guide ${id}`);
+  }
+
+  // 2) read the raw text
+  const text = await res.text().catch(() => '');
+
+  // 3) only parse if non‐empty
+  if (!text) {
+    return;     // nothing to return on a 204
+  }
+
+  return JSON.parse(text);
 };
