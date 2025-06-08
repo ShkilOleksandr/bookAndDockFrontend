@@ -36,7 +36,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_SALMON_HILL_089461B03 }}
           repo_token:                                 ${{ secrets.GITHUB_TOKEN }}
           action:                                    upload
-          app_location:                              "/"       # your code lives at repo root
+          app_location:                              "book-dock"       # your code lives at repo root
           api_location:                              ""        # no Azure Functions here
           output_location:                           "dist"    # Vite’s default build output
           app_build_command:                         "npm run build"
