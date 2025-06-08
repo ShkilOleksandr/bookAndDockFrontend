@@ -44,3 +44,7 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_SALMON_HILL_089461B03 }}
           action: "close"
+          app_location: "/"               
+          api_location: ""                # if no Azure Functions
+          output_location: "dist"         # Vite’s default build folder
+          app_build_command: "npm run build"  # force the build step
