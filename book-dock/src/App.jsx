@@ -18,6 +18,8 @@ import Reviews from './pages/Reviews';
 import Ports from './pages/Ports';
 import Comments from './pages/Comments';
 import Bookings from './pages/Bookings';
+import Services  from './pages/Services';
+import Locations from './pages/Locations';
 // ← your feature‑based login page
 import LoginPage   from './features/auth/LoginPage';
 
@@ -47,6 +49,8 @@ export default function App() {
           <Route path="guides"   element={<Guides />} />
           <Route path="settings" element={<Settings />} />
           <Route path="comments" element={<Comments />} />
+          <Route path="services" element={<Services />} />
+          <Route path="locations" element={<Locations />} />
         </Route>
 
         {/* 3) catch any unknown URL and send to /login */}
