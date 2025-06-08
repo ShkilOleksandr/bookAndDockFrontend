@@ -58,15 +58,16 @@ export const updateGuide = async (id, data) => {
     isApproved: true,
   };
 
-  const res = await fetch(`${BASE_URL}/api/Guide`, {
+  // note the `/${id}` in the path:
+  const res = await fetch(`${BASE_URL}/api/Guide/${id}`, {
     method: 'PUT',
     headers: getAuthHeaders(),
     body: JSON.stringify(body),
   });
 
+  if (!res.ok) throw new Error(await res.text());
   return res.json();
 };
-
 export const deleteGuide = async (id) => {
   const res = await fetch(`${BASE_URL}/api/Guide/${id}`, {
     method: 'DELETE',
