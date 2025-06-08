@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v3
 
       # 2. (Optional) debug step—verify package.json is in the workspace
-      - name: Debug: Show workspace contents
+      - name: "Debug: Show workspace contents"
         run: |
           echo "Contents of $GITHUB_WORKSPACE:"
           ls -R $GITHUB_WORKSPACE
