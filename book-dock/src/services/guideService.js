@@ -1,74 +1,78 @@
 // src/services/guideService.js
 
-// pull in your base-URL and token
-const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  'https://book-and-dock-backend-app-684024935709.europe-north2.run.app';
+
 function getAuthHeaders() {
   const token = localStorage.getItem('token');
+  if (!token) console.warn('⚠️ No token found in localStorage!');
   return {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {})
+    ...(token && { Authorization: `Bearer ${token}` }),
   };
 }
 
-async function handleResp(res) {
-  if (!res.ok) {
-    // try to pull out a JSON error message
-    let errText = '';
-    try { errText = await res.text(); } catch {}
-    throw new Error(`HTTP ${res.status} ${res.statusText}${errText ? ` — ${errText}` : ''}`);
-  }
-  return res.json();
-}
-
-// GET /api/Guide
-export function getGuides() {
-  return fetch(`${apiBase}/api/Guide`, {
+// src/services/guideService.js
+export const getGuides = async () => {
+  const res = await fetch(`${BASE_URL}/api/Guide`, {
     headers: getAuthHeaders(),
-    credentials: 'include'
-  }).then(handleResp);
-}
+    // (no credentials flag, just like your bookingService)
+  });
 
-// POST /api/Guide
-export function addGuide({ title, content, authorID, createdOn }) {
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    console.error('Error fetching guides:', res.status, text);
+    throw new Error(text || 'Failed to fetch guides');
+  }
+
+  return res.json();
+};
+
+
+export const addGuide = async (data) => {
   const body = {
     id: 0,
-    title,
-    content,
-    createdBy: Number(authorID),
-    createdOn: new Date(createdOn).toISOString(),
-    isApproved: true
+    title: data.title,
+    content: data.content,
+    createdBy: Number(data.authorID),
+    createdOn: new Date(data.createdOn).toISOString(),
+    isApproved: true,
   };
-  return fetch(`${apiBase}/api/Guide`, {
+
+  const res = await fetch(`${BASE_URL}/api/Guide`, {
     method: 'POST',
     headers: getAuthHeaders(),
-    credentials: 'include',
-    body: JSON.stringify(body)
-  }).then(handleResp);
-}
+    body: JSON.stringify(body),
+  });
 
-// PUT /api/Guide
-export function updateGuide(id, { title, content, authorID, createdOn }) {
+  return res.json();
+};
+
+export const updateGuide = async (id, data) => {
   const body = {
     id,
-    title,
-    content,
-    createdBy: Number(authorID),
-    createdOn: new Date(createdOn).toISOString(),
-    isApproved: true
+    title: data.title,
+    content: data.content,
+    createdBy: Number(data.authorID),
+    createdOn: new Date(data.createdOn).toISOString(),
+    isApproved: true,
   };
-  return fetch(`${apiBase}/api/Guide`, {
+
+  const res = await fetch(`${BASE_URL}/api/Guide`, {
     method: 'PUT',
     headers: getAuthHeaders(),
-    credentials: 'include',
-    body: JSON.stringify(body)
-  }).then(handleResp);
-}
+    body: JSON.stringify(body),
+  });
 
-// DELETE /api/Guide/{id}
-export function deleteGuide(id) {
-  return fetch(`${apiBase}/api/Guide/${id}`, {
+  return res.json();
+};
+
+export const deleteGuide = async (id) => {
+  const res = await fetch(`${BASE_URL}/api/Guide/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
-    credentials: 'include'
-  }).then(handleResp);
-}
+  });
+
+  return res.json();
+};
