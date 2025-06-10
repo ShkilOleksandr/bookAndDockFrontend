@@ -104,3 +104,14 @@ export const deleteGuide = async (id) => {
 
   return JSON.parse(text);
 };
+// src/services/guideService.js
+export const getGuide = async (id) => {
+  const res = await fetch(`${BASE_URL}/api/Guide/${id}`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    throw new Error(txt || `Failed to fetch guide ${id}`);
+  }
+  return res.json();
+};

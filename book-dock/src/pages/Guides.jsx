@@ -7,8 +7,10 @@ import {
   deleteGuide,
 } from '../services/guideService';
 import './styling/Users.css'; // reuse your .user-table, .btn, etc.
+import { useNavigate } from 'react-router-dom';
 
 export default function Guides() {
+  const navigate = useNavigate();
   const [guides, setGuides]       = useState([]);
   const [editingGuide, setEditingGuide] = useState(null); 
   const [mode, setMode]           = useState(null); // 'new' or 'edit'
@@ -131,10 +133,14 @@ export default function Guides() {
           </thead>
           <tbody>
             {guides.map(g => (
-              <tr key={g.id}>
+              <tr key={g.id} onClick={() => navigate(`/guides/${g.id}`)} style={{ cursor: 'pointer' }}>
                 <td>{g.id}</td>
                 <td>{g.title}</td>
-                <td>{g.content}</td>
+                <td>
+                {g.content.length > 50
+                  ? g.content.slice(0, 50) + '…'
+                  : g.content}
+                </td>
                 <td>{g.createdBy}</td>
                 <td>{new Date(g.createdOn).toLocaleDateString()}</td>
                 <td>
