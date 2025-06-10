@@ -22,11 +22,9 @@ export default function Services() {
     createdOn:     '', // YYYY-MM-DD
   });
 
-  // Safely compare even if name is missing
   const sortByName = (a, b) =>
     (a?.name || '').localeCompare(b?.name || '', undefined, { sensitivity: 'base' });
 
-  // Fetch & sort services, used in useEffect and after create
   const loadServices = async () => {
     try {
       const data = await getServices();
@@ -42,7 +40,6 @@ export default function Services() {
     }
   };
 
-  // initial load
   useEffect(() => {
     loadServices();
   }, []);
@@ -50,15 +47,7 @@ export default function Services() {
   const onNewClick = () => {
     setMode('new');
     setEditingService(null);
-    setForm({
-      name:          '',
-      description:   '',
-      price:         '',
-      portId:        '',
-      dockingSpotId: '',
-      isAvailable:   false,
-      createdOn:     '',
-    });
+    setForm({ name: '', description: '', price: '', portId: '', dockingSpotId: '', isAvailable: false, createdOn: '' });
   };
 
   const handleEditClick = svc => {
@@ -67,13 +56,11 @@ export default function Services() {
     setForm({
       name:          svc.name,
       description:   svc.description,
-      price:         svc.price?.toString()         || '',
-      portId:        svc.portId?.toString()        || '',
+      price:         svc.price?.toString() || '',
+      portId:        svc.portId?.toString() || '',
       dockingSpotId: svc.dockingSpotId?.toString() || '',
       isAvailable:   !!svc.isAvailable,
-      createdOn:     svc.createdOn
-                        ? svc.createdOn.slice(0, 10)
-                        : '',
+      createdOn:     svc.createdOn ? svc.createdOn.slice(0, 10) : '',
     });
   };
 
@@ -101,23 +88,20 @@ export default function Services() {
 
     try {
       if (mode === 'new') {
-        // create then reload fresh list
-        await addService(payload);
-        await loadServices();
+        const created = await addService(payload);
+        if (created) {
+          setServices(ss => [...ss, created].sort(sortByName));
+        } else {
+          await loadServices();
+        }
       } else {
-        // update inline
         await updateService(editingService.id, payload);
         setServices(ss =>
           ss
-            .map(s =>
-              s.id === editingService.id
-                ? { ...s, ...payload }
-                : s
-            )
+            .map(s => s.id === editingService.id ? { ...s, ...payload } : s)
             .sort(sortByName)
         );
       }
-      // close form
       setMode(null);
       setEditingService(null);
     } catch (err) {
@@ -129,9 +113,7 @@ export default function Services() {
   return (
     <div style={{ padding: '20px' }}>
       <h2 style={{ textAlign: 'center' }}>Services</h2>
-      <button className="btn btn-new" onClick={onNewClick}>
-        + Add Service
-      </button>
+      <button className="btn btn-new" onClick={onNewClick}>+ Add Service</button>
 
       {services.length === 0 ? (
         <p>No services found.</p>
@@ -162,16 +144,8 @@ export default function Services() {
                 <td>{s.isAvailable ? 'Yes' : 'No'}</td>
                 <td>{new Date(s.createdOn).toLocaleDateString()}</td>
                 <td>
-                  <button className="btn btn-edit" onClick={() => handleEditClick(s)}>
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-delete"
-                    onClick={() => handleDelete(s.id)}
-                    style={{ marginLeft: '10px' }}
-                  >
-                    Delete
-                  </button>
+                  <button className="btn btn-edit" onClick={() => handleEditClick(s)}>Edit</button>
+                  <button className="btn btn-delete" onClick={() => handleDelete(s.id)} style={{ marginLeft: '10px' }}>Delete</button>
                 </td>
               </tr>
             ))}
@@ -180,98 +154,20 @@ export default function Services() {
       )}
 
       {(mode === 'new' || mode === 'edit') && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '20%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: '#fff',
-            padding: '20px',
-            border: '1px solid #ccc',
-            boxShadow: '0 0 10px rgba(0,0,0,0.2)',
-            zIndex: 1000,
-            width: '400px',
-            maxWidth: '90vw',
-          }}
-        >
+        <div style={{ position: 'fixed', top: '20%', left: '50%', transform: 'translateX(-50%)', background: '#fff', padding: '20px', border: '1px solid #ccc', boxShadow: '0 0 10px rgba(0,0,0,0.2)', zIndex: 1000, width: '400px', maxWidth: '90vw' }}>
           <h3>{mode === 'new' ? 'New Service' : `Edit Service #${editingService.id}`}</h3>
           <div style={{ display: 'grid', gap: '10px' }}>
-            <label>
-              Name<br />
-              <input
-                name="name"
-                value={form.name}
-                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              />
-            </label>
-            <label>
-              Description<br />
-              <textarea
-                name="description"
-                rows={3}
-                value={form.description}
-                onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              />
-            </label>
-            <label>
-              Price<br />
-              <input
-                name="price"
-                type="number"
-                step="any"
-                value={form.price}
-                onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
-              />
-            </label>
-            <label>
-              Port ID<br />
-              <input
-                name="portId"
-                type="number"
-                value={form.portId}
-                onChange={e => setForm(f => ({ ...f, portId: e.target.value }))}
-              />
-            </label>
-            <label>
-              Docking Spot ID<br />
-              <input
-                name="dockingSpotId"
-                type="number"
-                value={form.dockingSpotId}
-                onChange={e => setForm(f => ({ ...f, dockingSpotId: e.target.value }))}
-              />
-            </label>
-            <label>
-              Available<br />
-              <input
-                name="isAvailable"
-                type="checkbox"
-                checked={form.isAvailable}
-                onChange={e => setForm(f => ({ ...f, isAvailable: e.target.checked }))}
-              />
-            </label>
-            <label>
-              Created On<br />
-              <input
-                name="createdOn"
-                type="date"
-                value={form.createdOn}
-                onChange={e => setForm(f => ({ ...f, createdOn: e.target.value }))}
-              />
-            </label>
+            <label>Name<br/><input name="name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}/></label>
+            <label>Description<br/><textarea name="description" rows={3} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}/></label>
+            <label>Price<br/><input name="price" type="number" step="any" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))}/></label>
+            <label>Port ID<br/><input name="portId" type="number" value={form.portId} onChange={e => setForm(f => ({ ...f, portId: e.target.value }))}/></label>
+            <label>Docking Spot ID<br/><input name="dockingSpotId" type="number" value={form.dockingSpotId} onChange={e => setForm(f => ({ ...f, dockingSpotId: e.target.value }))}/></label>
+            <label>Available<br/><input name="isAvailable" type="checkbox" checked={form.isAvailable} onChange={e => setForm(f => ({ ...f, isAvailable: e.target.checked }))}/></label>
+            <label>Created On<br/><input name="createdOn" type="date" value={form.createdOn} onChange={e => setForm(f => ({ ...f, createdOn: e.target.value }))}/></label>
           </div>
           <div style={{ marginTop: '10px' }}>
             <button onClick={handleSave}>{mode === 'new' ? 'Create' : 'Save'}</button>
-            <button
-              onClick={() => {
-                setMode(null);
-                setEditingService(null);
-              }}
-              style={{ marginLeft: '10px' }}
-            >
-              Cancel
-            </button>
+            <button onClick={() => { setMode(null); setEditingService(null); }} style={{ marginLeft: '10px' }}>Cancel</button>
           </div>
         </div>
       )}

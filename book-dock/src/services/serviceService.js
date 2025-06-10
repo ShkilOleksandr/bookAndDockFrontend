@@ -8,31 +8,93 @@ function getAuthHeaders() {
 }
 
 export const getServices = async () => {
-  const res = await fetch(`${BASE_URL}/api/Service`, { headers: getAuthHeaders() });
-  if (!res.ok) { const txt = await res.text().catch(() => ''); throw new Error(txt || 'Failed to fetch services'); }
+  const res = await fetch(`${BASE_URL}/api/Service`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    throw new Error(txt || 'Failed to fetch services');
+  }
   return res.json();
 };
 
-export const addService = async data => {
-  const res = await fetch(`${BASE_URL}/api/Service`, { headers: getAuthHeaders() });
-  const contentType = res.headers.get('Content-Type') || ''
-  const text = await res.text().catch(() => '')
+export const addService = async (data) => {
+  // build payload matching backend expectations
+  const payload = {
+    id:            0,
+    name:          data.name,
+    description:   data.description,
+    price:         data.price,
+    portId:        data.portId,
+    dockingSpotId: data.dockingSpotId,
+    isAvailable:   data.isAvailable,
+    createdOn:     new Date(data.createdOn).toISOString(),
+  };
+
+  const res = await fetch(`${BASE_URL}/api/Service`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
+  });
+
+  // read raw text (may be empty)
+  const text = await res.text().catch(() => '');
+
+  // work around intermittent 500-with-empty-body bug: if service created but server returns 500 and no body,
+  // treat as success and trigger a reload
   if (!res.ok) {
-    throw new Error(text || 'Failed to create service')
+    if (res.status === 500 && text === '') {
+      console.warn('Service created but server returned 500 with no content; continuing as success');
+      return null;
+    }
+    console.error('Error creating service:', res.status, text);
+    throw new Error(text || 'Failed to create service');
   }
-  if (!contentType.includes('application/json')) {
-    throw new Error(text || 'Unexpected response from server')
-  }
-  return JSON.parse(text)
-}
-export const updateService = async (id, data) => {
-  const res = await fetch(`${BASE_URL}/api/Service/${id}`, { method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify({ id, name: data.name, description: data.description, price: data.price, portId: data.portId, dockingSpotId: data.dockingSpotId, isAvailable: data.isAvailable, createdOn: new Date(data.createdOn).toISOString() }) });
-  if (!res.ok) { const txt = await res.text().catch(() => ''); throw new Error(txt || `Failed to update service ${id}`); }
-  const text = await res.text().catch(() => ''); if (!text) return; return JSON.parse(text);
+
+  // if there's JSON content return it, else null
+  return text ? JSON.parse(text) : null;
 };
 
-export const deleteService = async id => {
-  const res = await fetch(`${BASE_URL}/api/Service/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
-  if (!res.ok) { const txt = await res.text().catch(() => ''); throw new Error(txt || `Failed to delete service ${id}`); }
-  const text = await res.text().catch(() => ''); if (!text) return; return JSON.parse(text);
+
+
+export const updateService = async (id, data) => {
+  const payload = {
+    id,
+    name:          data.name,
+    description:   data.description,
+    price:         data.price,
+    portId:        data.portId,
+    dockingSpotId: data.dockingSpotId,
+    isAvailable:   data.isAvailable,
+    createdOn:     new Date(data.createdOn).toISOString(),
+  };
+
+  const res = await fetch(`${BASE_URL}/api/Service/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    console.error(`Failed to update service ${id}:`, res.status, txt);
+    throw new Error(txt || `Failed to update service ${id}`);
+  }
+  const text = await res.text().catch(() => '');
+  if (!text) return null;
+  return JSON.parse(text);
+};
+
+export const deleteService = async (id) => {
+  const res = await fetch(`${BASE_URL}/api/Service/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    console.error(`Failed to delete service ${id}:`, res.status, txt);
+    throw new Error(txt || `Failed to delete service ${id}`);
+  }
+  const text = await res.text().catch(() => '');
+  if (!text) return null;
+  return JSON.parse(text);
 };
