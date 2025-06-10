@@ -1,15 +1,12 @@
+// src/services/userService.js
 const BASE_URL = 'https://se2.lemonfield-889f35af.germanywestcentral.azurecontainerapps.io';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
-
-  if (!token) {
-    console.warn("⚠️ No token found in localStorage!");
-  }
-
+  if (!token) console.warn("⚠️ No token found in localStorage!");
   return {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
+    ...(token && { Authorization: `Bearer ${token}` }),
   };
 };
 
@@ -17,15 +14,35 @@ export const getUsers = async () => {
   const res = await fetch(`${BASE_URL}/admin/users`, {
     headers: getAuthHeaders(),
   });
-
   if (!res.ok) {
-    // Try to read text response to log for debugging
-    const errorText = await res.text();
+    const errorText = await res.text().catch(() => '');
     console.error('Error fetching users:', res.status, errorText);
-    return []; // return an empty array so your UI doesn't break
+    return [];
   }
+  return res.json();
+};
 
-  return res.json(); // safe now, since res.ok is true
+// NEW: addUser (register) implementation
+export const addUser = async (data) => {
+  // Use the Auth/Register endpoint
+  const res = await fetch(`${BASE_URL}/api/Auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: data.name,
+      surname: data.surname,
+      email: data.email,
+      password: data.password,
+    }),
+  });
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    throw new Error(errText || 'Failed to register user');
+  }
+  // We don't expect JSON back for the new user here; return true for success
+  return true;
 };
 
 export const updateUser = async (id, data) => {
