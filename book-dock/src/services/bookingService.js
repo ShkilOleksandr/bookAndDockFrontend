@@ -33,11 +33,10 @@ export const createBooking = async (data) => {
     body: JSON.stringify({
       sailorId:      Number(data.sailorId),
       dockingSpotId: Number(data.dockingSpotId),
-      dockId:        data.dockId != null ? Number(data.dockId) : undefined,
       startDate:     new Date(data.startDate).toISOString(),
       endDate:       new Date(data.endDate).toISOString(),
       people:        Number(data.people),
-      paymentMethod: data.paymentMethod,
+      payment: data.paymentMethod,
     }),
   });
   if (!res.ok) {
@@ -59,7 +58,6 @@ export const updateBooking = async (id, data) => {
       id,
       sailorId:      Number(data.sailorId),
       dockingSpotId: Number(data.dockingSpotId),
-      dockId:        data.dockId != null ? Number(data.dockId) : undefined,
       startDate:     new Date(data.startDate).toISOString(),
       endDate:       new Date(data.endDate).toISOString(),
       people:        Number(data.people),

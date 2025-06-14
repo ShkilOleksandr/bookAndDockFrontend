@@ -15,7 +15,6 @@ export default function Bookings() {
   const [form, setForm] = useState({
     sailorId:      '',
     dockingSpotId: '',
-    dockId:        '',
     startDate:     '',
     endDate:       '',
     people:        '',
@@ -36,7 +35,7 @@ export default function Bookings() {
   const resetForm = () => setForm({
     sailorId:      '',
     dockingSpotId: '',
-    dockId:        '',
+
     startDate:     '',
     endDate:       '',
     people:        '',
@@ -55,11 +54,10 @@ export default function Bookings() {
     setForm({
       sailorId:      b.sailorId.toString(),
       dockingSpotId: b.dockingSpotId.toString(),
-      dockId:        (b.dockId ?? '').toString(),
       startDate:     b.startDate.slice(0,10),
       endDate:       b.endDate.slice(0,10),
       people:        b.people.toString(),
-      paymentMethod: b.paymentMethod || '',
+      paymentMethodId: b.paymentMethod || '',
     });
   };
 
@@ -100,14 +98,20 @@ export default function Bookings() {
     <div style={{ padding: '20px' }}>
       <h2 style={{ textAlign: 'center' }}>Bookings</h2>
       {/* <button className="btn btn-new" onClick={onNewClick}>+ Add Booking</button> */}
-
+      <button
+        className="btn btn-new"
+        onClick={onNewClick}
+        style={{ marginBottom: '15px' }}
+      >
+        + Add Booking
+      </button>
       {bookings.length === 0 ? (
         <p>No bookings found.</p>
       ) : (
         <table className="user-table">
           <thead>
             <tr>
-              <th>Id</th><th>Sailor</th><th>Dock</th><th>Spot</th><th>Start</th><th>End</th><th>People</th><th>Payment</th><th>Actions</th>
+              <th>Id</th><th>Sailor</th><th>Spot</th><th>Start</th><th>End</th><th>People</th><th>Payment</th><th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -115,12 +119,11 @@ export default function Bookings() {
               <tr key={b.id}>
                 <td>{b.id}</td>
                 <td>{b.sailorId}</td>
-                <td>{b.dockId}</td>
                 <td>{b.dockingSpotId}</td>
                 <td>{new Date(b.startDate).toLocaleDateString()}</td>
                 <td>{new Date(b.endDate).toLocaleDateString()}</td>
                 <td>{b.people}</td>
-                <td>{b.paymentMethod}</td>
+                <td>{b.paymentMethodId}</td>
                 <td>
                   <button className="btn btn-edit" onClick={() => handleEditClick(b)}>Edit</button>
                   <button className="btn btn-delete" onClick={() => handleDelete(b.id)} style={{ marginLeft: 8 }}>Delete</button>
