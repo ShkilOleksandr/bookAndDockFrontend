@@ -1,7 +1,9 @@
+// src/pages/GuideEdit.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getGuide, updateGuide } from '../services/guideService';
-import axios from 'axios';
+import { getImages, getImageUrl } from '../services/imageService';
+import './styling/Users.css'; // for basic button/table styles
 
 export default function GuideEdit() {
   const { id } = useParams();
@@ -14,11 +16,12 @@ export default function GuideEdit() {
     authorID:  '',
     createdOn: '',
   });
-  const [images, setImages] = useState([]);      // ← our image menu
+  const [images, setImages] = useState([]);
   const [showPicker, setShowPicker] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(null);
 
+  // load guide data
   useEffect(() => {
     getGuide(id)
       .then(g => {
@@ -36,12 +39,11 @@ export default function GuideEdit() {
       });
   }, [id]);
 
-  // Fetch your images once when the picker is first opened
+  // fetch images once when opening picker
   const loadImages = async () => {
     if (images.length) return;
     try {
-      const { data } = await axios.get('/api/Image'); // adjust as needed
-      // assume data is an array of { id, url } or similar
+      const data = await getImages();
       setImages(data);
     } catch (e) {
       console.error('Couldn’t load images', e);
@@ -58,13 +60,11 @@ export default function GuideEdit() {
     const { selectionStart, selectionEnd } = ta;
     const before = form.content.slice(0, selectionStart);
     const after  = form.content.slice(selectionEnd);
-    const imgTag = `<img src="${url}" />`;
+    const imgTag = `<img src=\"${url}\" style=\"max-width:100%;\"/>`;
     const newContent = before + imgTag + after;
 
     setForm(f => ({ ...f, content: newContent }));
     setShowPicker(false);
-
-    // after React updates DOM, put cursor after the new tag:
     requestAnimationFrame(() => {
       const pos = before.length + imgTag.length;
       ta.focus();
@@ -92,8 +92,10 @@ export default function GuideEdit() {
   return (
     <div style={{ padding: 20, width: '90%' }}>
       <h2>Edit Guide #{id}</h2>
-      {/* … other fields … */}
-      <label>
+
+      {/* Title/author/createdOn fields omitted for brevity */}
+
+      <label style={{ display: 'block', marginTop: 12 }}>
         Content (HTML)<br/>
         <div style={{ position: 'relative' }}>
           <textarea
@@ -106,11 +108,10 @@ export default function GuideEdit() {
           <button
             type="button"
             onClick={openPicker}
+            className="btn btn-primary"
             style={{
-              position: 'absolute',
-              top: 4, right: 4,
-              padding: '4px 8px',
-              fontSize: 12
+              position: 'absolute', top: 4, right: 4,
+              padding: '4px 8px', fontSize: 12,
             }}
           >
             + Image
@@ -121,36 +122,34 @@ export default function GuideEdit() {
       {showPicker && (
         <div
           style={{
-            position: 'absolute',
-            zIndex: 10,
-            top: '50px', right: '20px',
-            background: 'white',
-            border: '1px solid #ccc',
-            padding: 12,
-            maxHeight: 300,
-            overflowY: 'auto',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+            position: 'absolute', zIndex: 10,
+            top: '120px', right: '20px',
+            background: '#fff', border: '1px solid #ccc', padding: 12,
+            maxHeight: 300, overflowY: 'auto', boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
           }}
         >
           <h4>Select an image</h4>
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, 80px)',
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fill, 80px)',
               gap: 8
             }}
           >
             {images.map(img => (
               <img
                 key={img.id}
-                src={img.url}
-                alt=""
+                src={getImageUrl(img.id)}
+                alt={`Image ${img.id}`}
                 style={{ width: 80, height: 80, objectFit: 'cover', cursor: 'pointer' }}
-                onClick={() => insertImage(img.url)}
+                onClick={() => insertImage(getImageUrl(img.id))}
               />
             ))}
           </div>
-          <button onClick={() => setShowPicker(false)} style={{ marginTop: 8 }}>
+          <button
+            className="btn"
+            onClick={() => setShowPicker(false)}
+            style={{ marginTop: 8 }}
+          >
             Close
           </button>
         </div>
