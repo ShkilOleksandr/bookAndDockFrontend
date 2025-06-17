@@ -40,12 +40,10 @@ export default function DockingSpots() {
   };
 
   const handleDelete = async (id) => {
-    // optional confirmation
     if (!window.confirm('Are you sure you want to delete this spot?')) return;
 
     try {
       await deleteDockingSpot(id);
-      // remove from local state
       setSpots(prev => prev.filter(s => s.id !== id));
     } catch (err) {
       console.error('Delete failed:', err);
@@ -58,7 +56,6 @@ const handleUpdate = async () => {
     const payload = { ...editingSpot, ...form };
     const returnedSpot = await updateDockingSpot(editingSpot.id, payload);
 
-    // replace in state and re-sort
     setSpots(prev =>
       [...prev.map(s => s.id === returnedSpot.id ? returnedSpot : s)]
         .sort(sortByName)

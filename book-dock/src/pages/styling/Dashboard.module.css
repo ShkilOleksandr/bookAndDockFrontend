@@ -5,8 +5,8 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background: var(--gray-50);       /* light gray page background */
-  min-height: 100vh;                /* full‑screen height under your navbar */
+  background: var(--gray-50);    
+  min-height: 100vh;                
 }
 
 .title {
@@ -21,7 +21,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
-  justify-content: center;          /* center the grid items */
+  justify-content: center;          
   width: 100%;
   max-width: 1200px;
 
@@ -48,5 +48,5 @@
   font-size: 1.75rem;
   font-weight: bold;
   color: var(--blue-600);
-  margin-top: auto;  /* push value to the bottom of the card */
+  margin-top: auto; 
 }

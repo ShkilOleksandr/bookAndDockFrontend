@@ -18,7 +18,7 @@
   background: var(--tbl-bg);
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   border-radius: 6px;
-  overflow: hidden; /* round corners */
+  overflow: hidden; 
   margin-top: 16px;
 }
 
@@ -46,7 +46,6 @@
   background: var(--row-hover);
 }
 
-/* Button styles */
 .user-table .btn {
   padding: var(--btn-padding);
   color: var(--btn-fg);

@@ -6,7 +6,6 @@ export default function RequireAuth({ children }) {
   const token = localStorage.getItem('token');
   const location = useLocation();
 
-  // if there is no token, redirect to /login
   if (!token) {
     return (
       <Navigate
@@ -17,6 +16,5 @@ export default function RequireAuth({ children }) {
     );
   }
 
-  // otherwise, render the protected UI
   return children;
 }

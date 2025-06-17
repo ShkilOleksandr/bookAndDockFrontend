@@ -5,20 +5,17 @@
     flex-direction: column;
     gap: 1rem;
   
-    /* outline the form in a light gray */
     border: 2px solid var(--gray-300, #D1D5DB);
     border-radius: 0.5rem;
     padding: 1.5rem;
     background: white;
   
-    /* center & constrain width */
     max-width: 360px;
     margin: 2rem auto;
   }
   
   .input {
     padding: 0.5rem;
-    /* medium gray border for inputs */
     border: 1px solid var(--gray-400, #9CA3AF);
     border-radius: 4px;
     font-size: 1rem;

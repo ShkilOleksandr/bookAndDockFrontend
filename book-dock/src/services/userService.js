@@ -22,9 +22,7 @@ export const getUsers = async () => {
   return res.json();
 };
 
-// NEW: addUser (register) implementation
 export const addUser = async (data) => {
-  // Use the Auth/Register endpoint
   const res = await fetch(`${BASE_URL}/api/Auth/register`, {
     method: 'POST',
     headers: {
@@ -41,7 +39,6 @@ export const addUser = async (data) => {
     const errText = await res.text().catch(() => '');
     throw new Error(errText || 'Failed to register user');
   }
-  // We don't expect JSON back for the new user here; return true for success
   return true;
 };
 

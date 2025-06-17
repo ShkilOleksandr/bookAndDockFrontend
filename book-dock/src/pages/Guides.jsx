@@ -6,14 +6,14 @@ import {
   updateGuide,
   deleteGuide,
 } from '../services/guideService';
-import './styling/Users.css'; // reuse your .user-table, .btn, etc.
+import './styling/Users.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function Guides() {
   const navigate = useNavigate();
   const [guides, setGuides]       = useState([]);
   const [editingGuide, setEditingGuide] = useState(null); 
-  const [mode, setMode]           = useState(null); // 'new' or 'edit'
+  const [mode, setMode]           = useState(null); 
   const [form, setForm] = useState({
     title:     '',
     content:   '',
@@ -21,7 +21,6 @@ export default function Guides() {
     createdOn: '', // YYYY-MM-DD
   });
 
-  // sort alphabetically by title
   const sortByTitle = (a, b) =>
     a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
 
@@ -82,10 +81,8 @@ export default function Guides() {
 
        const created = await addGuide(payload);
        if (created) {
-         // Happy path: server gave us the new guide
          setGuides(gs => [...gs, created].sort(sortByTitle));
        } else {
-         // No content → re-load the full list
          const fresh = await getGuides();
          setGuides(fresh.sort(sortByTitle));
        }

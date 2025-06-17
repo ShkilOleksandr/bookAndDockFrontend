@@ -30,10 +30,8 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {/* 1) public login screen */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* 2) everything under "/" is protected AND wrapped in your Layout */}
         <Route
           path="/"
           element={
@@ -59,7 +57,6 @@ export default function App() {
           <Route path="images" element={<Images />} />
         </Route>
 
-        {/* 3) catch any unknown URL and send to /login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>

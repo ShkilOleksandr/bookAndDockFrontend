@@ -12,10 +12,6 @@ const getAuthHeaders = () => {
   };
 };
 
-/**
- * Fetch all reviews, optionally filtered by dockId (portId).
- * @param {number} [dockId]
- */
 export const getReviews = async (dockId) => {
   const params = new URLSearchParams();
   if (dockId != null) {
@@ -30,15 +26,13 @@ export const getReviews = async (dockId) => {
   if (!res.ok) {
     const errorText = await res.text();
     console.error('Error fetching reviews:', res.status, errorText);
-    return []; // return empty array so UI doesn’t break
+    return []; 
   }
 
-  return res.json(); // array of ReviewReturnDto
+  return res.json(); 
 };
 
-/**
- * Update a review by its ID. Expects an object of updated fields.
- */
+
 export const updateReview = async (id, data) => {
   const url = `${BASE_URL}/api/review/${id}`;
   const res = await fetch(url, {
@@ -53,10 +47,8 @@ export const updateReview = async (id, data) => {
     return { error: errorText || 'Failed to update review' };
   }
 
-  // read the raw body:
   const text = await res.text();
   if (!text) {
-    // no JSON in the body; assume success with no data
     return {};
   }
   try {
@@ -67,9 +59,6 @@ export const updateReview = async (id, data) => {
   }
 };
 
-/**
- * Delete a review by its ID.
- */
 export const deleteReview = async (id) => {
   const url = `${BASE_URL}/api/review/${id}`;
   const res = await fetch(url, {

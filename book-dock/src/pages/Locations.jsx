@@ -11,17 +11,15 @@ import './styling/Users.css';
 export default function Locations() {
   const [locations, setLocations] = useState([]);
   const [editingLocation, setEditingLocation] = useState(null);
-  const [mode, setMode] = useState(null); // 'new' or 'edit'
+  const [mode, setMode] = useState(null); 
   const [form, setForm] = useState({
-    latitude:       '',
-    longitude:      '',
-    town:           '',
-    portId:         '',
-    dockingSpotId:  '',
-    createdOn:      '', // YYYY-MM-DD
+    latitude:  '',
+    longitude: '',
+    town:      '',
+    portId:    '',
+    createdOn: '', // YYYY-MM-DD
   });
 
-  // sort alphabetically by town
   const sortByTown = (a, b) =>
     a.town.localeCompare(b.town, undefined, { sensitivity: 'base' });
 
@@ -41,31 +39,27 @@ export default function Locations() {
       });
   }, []);
 
-  // Prepare a blank form for creating a new location
   const onNewClick = () => {
     setMode('new');
     setEditingLocation(null);
     setForm({
-      latitude:       '',
-      longitude:      '',
-      town:           '',
-      portId:         '',
-      dockingSpotId:  '',
-      createdOn:      '',
+      latitude:  '',
+      longitude: '',
+      town:      '',
+      portId:    '',
+      createdOn: '',
     });
   };
 
-  // Load the selected row data into the form for editing
   const handleEditClick = loc => {
     setMode('edit');
     setEditingLocation(loc);
     setForm({
-      latitude:      loc.latitude.toString(),
-      longitude:     loc.longitude.toString(),
-      town:          loc.town,
-      portId:        loc.portId.toString(),
-      dockingSpotId: loc.dockingSpotId.toString(),
-      createdOn:     loc.createdOn.slice(0, 10),
+      latitude:  `${loc.latitude  ?? ''}`,
+      longitude: `${loc.longitude ?? ''}`,
+      town:      loc.town         ?? '',
+      portId:    loc.portId != null ? `${loc.portId}` : '',
+      createdOn: loc.createdOn ? loc.createdOn.slice(0, 10) : '',
     });
   };
 
@@ -82,12 +76,11 @@ export default function Locations() {
 
   const handleSave = async () => {
     const payload = {
-      latitude:      parseFloat(form.latitude),
-      longitude:     parseFloat(form.longitude),
-      town:          form.town,
-      portId:        Number(form.portId),
-      dockingSpotId: Number(form.dockingSpotId),
-      createdOn:     form.createdOn,
+      latitude:  parseFloat(form.latitude),
+      longitude: parseFloat(form.longitude),
+      town:      form.town,
+      portId:    Number(form.portId),
+      createdOn: form.createdOn,
     };
 
     try {
@@ -138,7 +131,6 @@ export default function Locations() {
               <th>Longitude</th>
               <th>Town</th>
               <th>PortId</th>
-              <th>DockingSpotId</th>
               <th>CreatedOn</th>
               <th>Actions</th>
             </tr>
@@ -151,7 +143,6 @@ export default function Locations() {
                 <td>{l.longitude}</td>
                 <td>{l.town}</td>
                 <td>{l.portId}</td>
-                <td>{l.dockingSpotId}</td>
                 <td>{new Date(l.createdOn).toLocaleDateString()}</td>
                 <td>
                   <button className="btn btn-edit" onClick={() => handleEditClick(l)}>
@@ -224,15 +215,6 @@ export default function Locations() {
                 type="number"
                 value={form.portId}
                 onChange={e => setForm(f => ({ ...f, portId: e.target.value }))}
-              />
-            </label>
-            <label>
-              Docking Spot ID<br/>
-              <input
-                name="dockingSpotId"
-                type="number"
-                value={form.dockingSpotId}
-                onChange={e => setForm(f => ({ ...f, dockingSpotId: e.target.value }))}
               />
             </label>
             <label>

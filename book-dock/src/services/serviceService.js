@@ -37,11 +37,8 @@ export const addService = async (data) => {
     body: JSON.stringify(payload),
   });
 
-  // read raw text (may be empty)
   const text = await res.text().catch(() => '');
 
-  // work around intermittent 500-with-empty-body bug: if service created but server returns 500 and no body,
-  // treat as success and trigger a reload
   if (!res.ok) {
     if (res.status === 500 && text === '') {
       console.warn('Service created but server returned 500 with no content; continuing as success');
@@ -51,7 +48,6 @@ export const addService = async (data) => {
     throw new Error(text || 'Failed to create service');
   }
 
-  // if there's JSON content return it, else null
   return text ? JSON.parse(text) : null;
 };
 

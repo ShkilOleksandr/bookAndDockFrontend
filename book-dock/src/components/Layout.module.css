@@ -1,4 +1,4 @@
-/* Sidebar.module.css */
+
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@
 }
 
 .sidebar .dropdown {
-  display: none;      /* hide on desktop */
+  display: none;      
 }
 
 @media (max-width: 768px) {
@@ -21,14 +21,13 @@
     height: auto;
   }
   .sidebar nav {
-    display: none;     /* hide full menu on small */
+    display: none;     
   }
   .sidebar .dropdown {
-    display: block;    /* show dropdown on small */
+    display: block;    
   }
 }
 
-/* Navbar.module.css */
 .navbar {
   display: flex;
   align-items: center;
@@ -48,7 +47,7 @@
 }
 
 .navbar .dropdown {
-  display: none;     /* only used on narrow */
+  display: none;    
 }
 
 @media (max-width: 768px) {

@@ -12,11 +12,9 @@ function getAuthHeaders() {
   };
 }
 
-// src/services/guideService.js
 export const getGuides = async () => {
   const res = await fetch(`${BASE_URL}/api/Guide`, {
     headers: getAuthHeaders(),
-    // (no credentials flag, just like your bookingService)
   });
 
   if (!res.ok) {
@@ -50,13 +48,11 @@ export const addGuide = async (data) => {
     throw new Error(errText || 'Failed to create guide');
   }
 
-  // read raw text and only parse if non-empty
   const text = await res.text().catch(() => '');
   if (!text) return;
   return JSON.parse(text);
 };
 
-// guideService.js
 export const updateGuide = async (id, data) => {
   const res = await fetch(`${BASE_URL}/api/guide/${id}`, {
     method: 'PUT',
@@ -76,7 +72,6 @@ export const updateGuide = async (id, data) => {
     throw new Error(errText || `Failed to update guide ${id}`);
   }
 
-  // Safely handle empty‐body responses:
   const text = await res.text().catch(() => '');
   if (!text) return;
   return JSON.parse(text);
@@ -88,23 +83,20 @@ export const deleteGuide = async (id) => {
     headers: getAuthHeaders(),
   });
 
-  // 1) error‐check
   if (!res.ok) {
     const errText = await res.text().catch(() => '');
     throw new Error(errText || `Failed to delete guide ${id}`);
   }
 
-  // 2) read the raw text
   const text = await res.text().catch(() => '');
 
-  // 3) only parse if non‐empty
   if (!text) {
-    return;     // nothing to return on a 204
+    return;     
   }
 
   return JSON.parse(text);
 };
-// src/services/guideService.js
+
 export const getGuide = async (id) => {
   const res = await fetch(`${BASE_URL}/api/Guide/${id}`, {
     headers: getAuthHeaders(),

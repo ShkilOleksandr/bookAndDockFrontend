@@ -11,7 +11,7 @@ import './styling/Users.css';
 export default function Bookings() {
   const [bookings, setBookings] = useState([]);
   const [editingBooking, setEditingBooking] = useState(null);
-  const [mode, setMode] = useState(null); // 'new' | 'edit'
+  const [mode, setMode] = useState(null); 
   const [form, setForm] = useState({
     sailorId: '',
     dockingSpotId: '',
@@ -89,7 +89,7 @@ export default function Bookings() {
       startDate: new Date(form.startDate).toISOString(),
       endDate: new Date(form.endDate).toISOString(),
       people: Number(form.people),
-      paymentMethod: form.paymentMethod, // string
+      paymentMethod: form.paymentMethod, 
     };
 
     try {

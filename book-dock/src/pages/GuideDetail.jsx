@@ -1,7 +1,7 @@
 // src/pages/GuideDetail.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './styling/Users.css'; // for button styles
+import './styling/Users.css'; 
 
 const BASE_URL = 'https://se2.lemonfield-889f35af.germanywestcentral.azurecontainerapps.io';
 

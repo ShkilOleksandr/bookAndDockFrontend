@@ -29,7 +29,6 @@ export default function Navbar() {
     <header className={styles.navbar}>
       <Sidebar />
 
-      {/* only show this on small screens, hide on wide screens via CSS */}
       <select
         className={styles.dropdown}
         value={pathname}
@@ -42,10 +41,8 @@ export default function Navbar() {
         ))}
       </select>
 
-      {/* center: admin panel title */}
       <h1 className={styles.title}>Admin Panel</h1>
 
-      {/* right: logout */}
       <button className={styles.logout} onClick={logout}>
         Log out
       </button>

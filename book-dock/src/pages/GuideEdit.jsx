@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getGuide, updateGuide } from '../services/guideService';
 import { getImages, getImageUrl } from '../services/imageService';
-import './styling/Users.css'; // for basic button/table styles
+import './styling/Users.css'; 
 
 export default function GuideEdit() {
   const { id } = useParams();
@@ -21,7 +21,6 @@ export default function GuideEdit() {
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState(null);
 
-  // load guide data
   useEffect(() => {
     getGuide(id)
       .then(g => {
@@ -39,7 +38,6 @@ export default function GuideEdit() {
       });
   }, [id]);
 
-  // fetch images once when opening picker
   const loadImages = async () => {
     if (images.length) return;
     try {
@@ -93,7 +91,6 @@ export default function GuideEdit() {
     <div style={{ padding: 24, maxWidth: 800, margin: '0 auto', background: '#f9f9f9', borderRadius: 8 }}>
       <h2 style={{ marginBottom: 16, textAlign: 'center', color: '#333' }}>Edit Guide #{id}</h2>
 
-      {/* Content Field */}
       <label style={{ display: 'block', marginBottom: 12, fontWeight: 600, color: '#555' }}>
         Content (HTML)
       </label>

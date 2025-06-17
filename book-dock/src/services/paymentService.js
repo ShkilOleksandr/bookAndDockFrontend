@@ -15,12 +15,12 @@ export const getPaymentMethod = async (id) => {
   if (!res.ok) {
     throw new Error(`Failed to fetch payment method ${id}`);
   }
-  return res.text(); // returns plain string, like "Online"
+  return res.text(); 
 };
 export const getAllPaymentMethods = async () => {
   const res = await fetch(`${BASE_URL}/api/pm`, {
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Failed to fetch payment methods');
-  return res.json(); // assuming returns [{id, name}]
+  return res.json(); 
 };

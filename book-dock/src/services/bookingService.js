@@ -12,7 +12,6 @@ const getAuthHeaders = () => {
   };
 };
 
-// GET all bookings
 export const getBookings = async () => {
   const res = await fetch(`${BASE_URL}/api/Booking`, {
     headers: getAuthHeaders(),
@@ -25,7 +24,6 @@ export const getBookings = async () => {
   return res.json();
 };
 
-// CREATE a booking
 export const createBooking = async (data) => {
   const res = await fetch(`${BASE_URL}/api/Booking`, {
     method: 'POST',
@@ -44,12 +42,10 @@ export const createBooking = async (data) => {
     console.error('Error creating booking:', res.status, text);
     throw new Error(text || 'Failed to create booking');
   }
-  // If the API returns JSON, parse it; otherwise reload
   const text = await res.text().catch(() => '');
   return text ? JSON.parse(text) : undefined;
 };
 
-// UPDATE a booking
 export const updateBooking = async (id, data) => {
   const res = await fetch(`${BASE_URL}/api/Booking/${id}`, {
     method: 'PUT',
@@ -73,7 +69,6 @@ export const updateBooking = async (id, data) => {
   return text ? JSON.parse(text) : undefined;
 };
 
-// DELETE a booking
 export const deleteBooking = async (id) => {
   const res = await fetch(`${BASE_URL}/api/Booking/${id}`, {
     method: 'DELETE',

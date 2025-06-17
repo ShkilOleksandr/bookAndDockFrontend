@@ -99,7 +99,6 @@ export default function Images() {
     <div style={{ padding: '20px' }}>
       <h2 style={{ textAlign: 'center' }}>Images</h2>
 
-      {/* Upload Section */}
       <div style={{ margin: '20px 0', textAlign: 'center' }}>
         <input
           type="file"

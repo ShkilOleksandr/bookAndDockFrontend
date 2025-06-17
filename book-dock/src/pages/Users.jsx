@@ -6,7 +6,7 @@ import './styling/Users.css';
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
-  const [mode, setMode] = useState(null); // 'new' or 'edit'
+  const [mode, setMode] = useState(null); 
   const [form, setForm] = useState({
     name: '',
     surname: '',
@@ -73,17 +73,14 @@ export default function Users() {
   const handleSave = async () => {
     try {
       if (mode === 'new') {
-        // Must have password for registration
         if (!form.password) {
           alert('Password is required for new users');
           return;
         }
         await addUser(form);
-        // After successful registration, reload full list
         loadUsers();
       } else {
         const payload = { ...form };
-        // remove password if empty on edit
         if (!payload.password) delete payload.password;
         await updateUser(editingUser.id, payload);
         setUsers(us => us.map(u => u.id === editingUser.id ? { ...u, ...form } : u).sort(sortByNameThenSurname));

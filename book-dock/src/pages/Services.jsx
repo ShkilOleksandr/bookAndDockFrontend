@@ -6,12 +6,12 @@ import {
   updateService,
   deleteService,
 } from '../services/serviceService';
-import './styling/Users.css'; // reuse your .user-table, .btn, etc.
+import './styling/Users.css'; 
 
 export default function Services() {
   const [services, setServices] = useState([]);
   const [editingService, setEditingService] = useState(null);
-  const [mode, setMode] = useState(null); // 'new' or 'edit'
+  const [mode, setMode] = useState(null); 
   const [form, setForm] = useState({
     name:          '',
     description:   '',

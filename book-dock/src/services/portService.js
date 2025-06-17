@@ -12,10 +12,6 @@ const getAuthHeaders = () => {
   };
 };
 
-/**
- * Fetch all ports.
- * Returns an empty array on error (and logs the error details).
- */
 export const getPorts = async () => {
   const url = `${BASE_URL}/api/Port`;
   const res = await fetch(url, { headers: getAuthHeaders() });
@@ -23,8 +19,8 @@ export const getPorts = async () => {
   if (!res.ok) {
     const errorText = await res.text();
     console.error('Error fetching ports:', res.status, errorText);
-    return []; // return empty array so UI doesn’t break
+    return []; 
   }
 
-  return res.json(); // expected array of PortReturnDto
+  return res.json(); 
 };

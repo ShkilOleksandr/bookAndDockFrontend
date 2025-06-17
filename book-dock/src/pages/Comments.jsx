@@ -5,20 +5,18 @@ import {
   updateComment,
   deleteComment,
 } from '../services/commentService';
-import './styling/Users.css'; // Reuse your table styles (e.g. .user-table, .btn)
+import './styling/Users.css'; 
 
 export default function Comments() {
   const [comments, setComments] = useState([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(null);
 
-  // Track which comment is being edited (or null if none)
   const [editingComment, setEditingComment] = useState(null);
   const [form, setForm] = useState({
     content: '',
   });
 
-  // Fetch all comments on mount
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -35,7 +33,6 @@ export default function Comments() {
       });
   }, []);
 
-  // Delete a comment by ID
   const handleDelete = async (commentId) => {
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this comment?'
@@ -48,11 +45,9 @@ export default function Comments() {
       return;
     }
 
-    // Filter out the deleted comment from local state
     setComments((prev) => prev.filter((c) => c.id !== commentId));
   };
 
-  // Open the edit form for a given comment
   const handleEditClick = (comment) => {
     setEditingComment(comment);
     setForm({
@@ -60,16 +55,14 @@ export default function Comments() {
     });
   };
 
-  // Save updates to the comment
  const handleUpdate = async () => {
    if (!editingComment) return;
-   // Build the full DTO the API expects
    const updatedDto = {
      id:        editingComment.id,
      createdBy: editingComment.createdBy,
      guideId:   editingComment.guideId,
      content:   form.content,
-     createdOn: editingComment.createdOn,    // or new Date().toISOString()
+     createdOn: editingComment.createdOn,    
    };
 
    const result = await updateComment(updatedDto);
@@ -78,7 +71,6 @@ export default function Comments() {
       return;
     }
 
-    // Merge updated content into local state
     setComments((prev) =>
       prev.map((c) =>
         c.id === editingComment.id
@@ -89,7 +81,6 @@ export default function Comments() {
     setEditingComment(null);
   };
 
-  // Render loading state
   if (loading) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
@@ -98,7 +89,6 @@ export default function Comments() {
     );
   }
 
-  // Render error state
   if (error) {
     return (
       <div style={{ padding: '20px', textAlign: 'center', color: 'red' }}>

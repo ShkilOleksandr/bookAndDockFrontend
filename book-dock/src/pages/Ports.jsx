@@ -1,7 +1,7 @@
 // src/pages/Ports.jsx
 import React, { useEffect, useState } from 'react';
 import { getPorts }           from '../services/portService';
-import './styling/Users.css';   // reuse your table CSS
+import './styling/Users.css';   
 
 export default function Ports() {
   const [ports, setPorts]       = useState([]);

@@ -2,7 +2,6 @@
 
 .sidebar {
   padding: 1rem;
-  /* whatever else you had for the panel… */
 }
 
 .dropdown {
@@ -13,7 +12,6 @@
   border: 1px solid var(--tbl-border);
   background: var(--tbl-bg);
   cursor: pointer;
-  /* Box shadow or focus style if you like: */
   transition: border-color 0.2s ease;
 }
 

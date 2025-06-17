@@ -17,14 +17,13 @@
 }
 
 .dropdown {
-  display: none; /* hidden by default on desktop */
+  display: none; 
   font-size: 1rem;
   padding: 0.5rem;
   border-radius: 0.375rem;
   border: none;
 }
 
-/* show the dropdown only on small screens */
 @media (max-width: 768px) {
   .dropdown {
     display: block;
@@ -33,10 +32,9 @@
   .logoutButton {
     margin: 1rem;
     padding: 0.5rem 1rem;
-    /* Either use a hex: */
-    background-color: #e53e3e;      /* roughly Tailwind red‑600 */
-    /* —or— give var() a fallback: */
-    /* background-color: var(--red-600, #e53e3e); */
+ 
+    background-color: #e53e3e;      
+
     color: white;
     border: none;
     border-radius: 0.375rem;
@@ -48,38 +46,32 @@
   }
   
   .logoutButton:hover {
-    background-color: #c53030;      /* red‑700 */
+    background-color: #c53030;    
   }
   
   .logoutButton:active {
-    background-color: #9b2c2c;      /* red‑800 */
+    background-color: #9b2c2c;     
   }
 
   .logout {
-  /* make the background red */
+
   background-color: #e74c3c;  
 
-  /* white text */
   color: white;              
 
-  /* no default border */
   border: none;              
 
-  /* padding for a nice tap target */
   padding: 0.5rem 1rem;      
 
-  /* huge radius = pill shape */
   border-radius: 9999px;     
 
-  /* pointer cursor on hover */
   cursor: pointer;           
 
-  /* optional drop-shadow for depth */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: background-color 0.2s;
 }
 
 .logout:hover {
-  /* slightly darker on hover */
+
   background-color: #c0392b;  
 }

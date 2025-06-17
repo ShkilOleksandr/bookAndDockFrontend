@@ -5,14 +5,13 @@ import {
   updateReview,
   deleteReview
 } from '../services/reviewService';
-import './styling/Users.css'; // reuse your table styles (e.g. .user-table, .btn)
+import './styling/Users.css'; 
 
 export default function Reviews() {
   const [reviews, setReviews]       = useState([]);
   const [loading, setLoading]       = useState(true);
   const [error, setError]           = useState(null);
 
-  // For editing:
   const [editingReview, setEditingReview] = useState(null);
   const [form, setForm] = useState({
     rating: '',
@@ -46,7 +45,6 @@ export default function Reviews() {
       alert('Error deleting review: ' + result.error);
       return;
     }
-    // Remove from local state
     setReviews((prev) => prev.filter((r) => r.id !== reviewId));
   };
 
@@ -71,7 +69,6 @@ export default function Reviews() {
       return;
     }
 
-    // Update local state: merge updated fields into the matching review
     setReviews((prev) =>
       prev.map((r) =>
         r.id === editingReview.id
@@ -147,7 +144,6 @@ export default function Reviews() {
         </table>
       )}
 
-      {/* Edit Modal / Floating Form */}
       {editingReview && (
         <div
           style={{
