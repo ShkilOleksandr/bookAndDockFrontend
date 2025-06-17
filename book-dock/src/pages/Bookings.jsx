@@ -21,26 +21,32 @@ export default function Bookings() {
     paymentMethod: '',
   });
   const [paymentMethodNames, setPaymentMethodNames] = useState([]);
-
+  const [paymentMethodMap, setPaymentMethodMap] = useState({});
   const sortById = (a, b) => a.id - b.id;
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [bookingsData, methods] = await Promise.all([
-          getBookings(),
-          getAllPaymentMethods()
-        ]);
-        setBookings(bookingsData.sort(sortById));
-        setPaymentMethodNames(methods.map(m => m.name));
-      } catch (err) {
-        console.error('Failed to load data:', err);
-        setBookings([]);
-        setPaymentMethodNames([]);
-      }
-    };
-    loadData();
-  }, []);
+  const loadData = async () => {
+    try {
+      const [bookingsData, methods] = await Promise.all([
+        getBookings(),
+        getAllPaymentMethods()
+      ]);
+      setBookings(bookingsData.sort(sortById));
+      setPaymentMethodNames(methods.map(m => m.name));
+
+      const idToNameMap = {};
+      methods.forEach(m => {
+        idToNameMap[m.id] = m.name;
+      });
+      setPaymentMethodMap(idToNameMap);
+    } catch (err) {
+      console.error('Failed to load data:', err);
+      setBookings([]);
+      setPaymentMethodNames([]);
+    }
+  };
+  loadData();
+}, []);
 
   const resetForm = () => setForm({
     sailorId: '',
@@ -99,7 +105,15 @@ export default function Bookings() {
         await updateBooking(editingBooking.id, payload);
         setBookings(bs =>
           bs.map(b =>
-            b.id === editingBooking.id ? { ...b, ...payload, paymentMethod: { name: form.paymentMethod } } : b
+            b.id === editingBooking.id ? {
+            ...b,
+            sailorId: payload.sailorId,
+            dockingSpotId: payload.dockingSpotId,
+            startDate: payload.startDate,
+            endDate: payload.endDate,
+            people: payload.people,
+            paymentMethodId: Object.keys(paymentMethodMap).find(id => paymentMethodMap[id] === form.paymentMethod),
+          } : b
           ).sort(sortById)
         );
       }
@@ -136,7 +150,7 @@ export default function Bookings() {
                 <td>{new Date(b.startDate).toLocaleDateString()}</td>
                 <td>{new Date(b.endDate).toLocaleDateString()}</td>
                 <td>{b.people}</td>
-                <td>{b.paymentMethod?.name || b.paymentMethod || 'Unknown'}</td>
+                <td>{paymentMethodMap[b.paymentMethodId] || 'Unknown'}</td>
                 <td>
                   <button className="btn btn-edit" onClick={() => handleEditClick(b)}>Edit</button>
                   <button className="btn btn-delete" onClick={() => handleDelete(b.id)} style={{ marginLeft: 8 }}>Delete</button>
