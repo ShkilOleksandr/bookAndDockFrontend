@@ -29,7 +29,7 @@ export default function GuideDetail() {
   if (error) {
     return (
       <div style={{ padding: 20 }}>
-        <button onClick={() => navigate(-1)}>← Back</button>
+        <button onClick={() => navigate('/guides')}>← Back</button>
         <h2>Error</h2>
         <p>{error}</p>
       </div>
@@ -38,7 +38,7 @@ export default function GuideDetail() {
   if (!guide) {
     return (
       <div style={{ padding: 20 }}>
-        <button onClick={() => navigate(-1)}>← Back</button>
+        <button onClick={() => navigate('/guides')}>← Back</button>
         <p>Loading…</p>
       </div>
     );
@@ -46,7 +46,7 @@ export default function GuideDetail() {
 
   return (
     <div style={{ padding: 20, maxWidth: 800, margin: '0 auto' }}>
-      <button onClick={() => navigate(-1)}>← Back to Guides</button>
+      <button onClick={() => navigate('/guides')}>← Back to Guides</button>
       <button
         className="btn btn-edit"
         style={{ marginLeft: 10 }}
