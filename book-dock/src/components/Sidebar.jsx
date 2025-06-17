@@ -14,6 +14,7 @@ const routes = [
   { label: 'Docking Spots', path: '/docking-spots' },
   { label: 'Services',  path: '/services'  },
   { label: 'Locations', path: '/locations' },
+  { label: 'Images',    path: '/images'    },
   //{ label: 'Settings',  path: '/settings'  },
 ];
 

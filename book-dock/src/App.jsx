@@ -22,6 +22,7 @@ import Services  from './pages/Services';
 import Locations from './pages/Locations';
 import GuideDetail from './pages/GuideDetail';
 import GuideEdit   from './pages/GuideEdit';
+import Images from './pages/Images';
 // ← your feature‑based login page
 import LoginPage   from './features/auth/LoginPage';
 
@@ -55,6 +56,7 @@ export default function App() {
           <Route path="services" element={<Services />} />
           <Route path="locations" element={<Locations />} />
           <Route path="guides/:id/edit" element={<GuideEdit />} />
+          <Route path="images" element={<Images />} />
         </Route>
 
         {/* 3) catch any unknown URL and send to /login */}
