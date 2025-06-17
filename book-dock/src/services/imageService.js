@@ -1,4 +1,4 @@
-// src/services/imageService.js
+/* src/services/imageService.js */
 const BASE_URL = 'https://se2.lemonfield-889f35af.germanywestcentral.azurecontainerapps.io';
 
 const getAuthHeaders = (isFormData = false) => {
@@ -9,9 +9,6 @@ const getAuthHeaders = (isFormData = false) => {
   };
 };
 
-/**
- * Fetch all image metadata (including id, createdAt, creatorId) from the server.
- */
 export const getImages = async () => {
   const res = await fetch(`${BASE_URL}/api/Image/all`, {
     headers: getAuthHeaders(),
@@ -23,17 +20,11 @@ export const getImages = async () => {
     throw new Error(errorText || 'Failed to fetch images');
   }
 
-  return res.json(); // returns array of image info objects
+  return res.json();
 };
 
-/**
- * Build the URL for downloading/previewing an image by its id.
- */
 export const getImageUrl = (id) => `${BASE_URL}/api/Image/download/${id}`;
 
-/**
- * Delete an image by its id.
- */
 export const deleteImage = async (id) => {
   const res = await fetch(`${BASE_URL}/api/Image/${id}`, {
     method: 'DELETE',
@@ -49,12 +40,11 @@ export const deleteImage = async (id) => {
   return {};
 };
 
-/**
- * Upload a new image file to the server.
- */
-export const uploadImage = async (file) => {
+export const uploadImage = async (file, createdBy, guideId) => {
   const formData = new FormData();
   formData.append('file', file);
+  formData.append('createdBy', createdBy);
+  formData.append('guideId', guideId);
 
   const res = await fetch(`${BASE_URL}/api/Image/upload`, {
     method: 'POST',
@@ -68,5 +58,5 @@ export const uploadImage = async (file) => {
     throw new Error(errorText || 'Failed to upload image');
   }
 
-  return res.json(); // returns the created image info (id, createdAt, creatorId)
+  return res.json();
 };

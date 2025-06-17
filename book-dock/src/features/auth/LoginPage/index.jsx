@@ -28,6 +28,7 @@ export default function LoginPage() {
         { email, password }
       );
       localStorage.setItem('token', data.token);
+
       navigate('/');
     } catch {
       setError('Login failed: check your credentials');
