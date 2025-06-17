@@ -72,7 +72,7 @@ export default function Bookings() {
       startDate: b.startDate.slice(0, 10),
       endDate: b.endDate.slice(0, 10),
       people: b.people.toString(),
-      paymentMethod: b.paymentMethod?.name || '',
+      paymentMethod: paymentMethodMap[b.paymentMethodId] || '',
     });
   };
 
