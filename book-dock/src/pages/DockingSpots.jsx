@@ -84,7 +84,6 @@ export default function DockingSpots() {
 
     try {
       if (editingSpot.id != null) {
-        // edit
         const updated = await updateDockingSpot(editingSpot.id, { id: editingSpot.id, ...payload });
         setSpots(prev =>
           prev.map(s => s.id === updated.id ? updated : s).sort(sortByName)
